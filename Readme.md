@@ -1,0 +1,10 @@
+# Readme
+## Done
+1. 登陆界面
+2. 选座界面
+## Todo
+1. 登陆表单处理
+2. 座位选择
+## Alternative
+1. https://github.com/MKitty/Library-reservation
+2. https://github.com/SE407-2017/FinalProject-library-seats-reservation
