@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>登录界面</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="" />
+    <script type="application/x-javascript">
+        addEventListener("load", function() {
+            setTimeout(hideURLbar, 0);
+        }, false);
+
+        function hideURLbar() {
+            window.scrollTo(0, 1);
+        }
+    </script>
+
+    <link href="/static/css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="/static/css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/chocolat.css" type="text/css" media="screen">
+    <link href="/static/css/easy-responsive-tabs.css" rel='stylesheet' type='text/css' />
+    <link rel="stylesheet" href="/static/css/flexslider.css" type="text/css" media="screen" property="" />
+    <link rel="stylesheet" href="/static/css/jquery-ui.css" />
+    <link href="/static/css/style.css" rel="stylesheet" type="text/css" media="all" />
+    <script type="text/javascript" src="/static/js/modernizr-2.6.2.min.js"></script>
+
+    <link href="http://fonts.googleapis.com/css?family=Oswald:300,400,700" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Federo" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
+</head>
+
+<body>
+    <section class="contact-w3ls" id="contact">
+        <div class="containerc">
+            <div class="col-lg-6 col-md-6 col-sm-6 contact-w3-agile2" data-aos="flip-left">
+                <div class="contact-agileits">
+                    {% if error %}
+                        <div class=tip>
+                            <h4>登录失败！</h4>
+                            <p class="contact-agile2">请确认您的学号和密码是否有误</p>
+                        </div>
+                    {% else %}
+                        <div class=tip>
+                            <h4>图书馆座位预约系统</h4>
+                            <p class="contact-agile2">山口会社出品</p>
+                        </div>
+                    {% endif %}
+                    <!--
+                    注册备用口
+                    {% if register_accept %}
+                        <div class=tip>
+                            <p>注册成功！请等待管理员审核</p>
+                        </div>
+                    {% endif %}
+                    -->
+                    <form action="/login" method="POST" name="sentMessage" id="contactForm">
+                        {% csrf_token %}
+                        <div class="control-group form-group">
+                            <div class="controls">
+                                <label class="contact-p1">学号：</label>
+                                <input type="text" class="form-control" name="ID" id="ID" onkeyup="this.value=this.value.replace(/\D/g,'')" maxlength="20" required >
+                                <p class="help-block"></p>
+                            </div>
+                        </div>
+                        <div class="control-group form-group">
+                            <div class="controls">
+                                <label class="contact-p1">密码：</label>
+                                <input type="password" class="form-control" name="psw" id="psw" style="bisibility:hidden" maxlength="20" required >
+                                <p class="help-block"></p>
+                            </div>
+                        </div>
+                        <p class="contact-agile2"></p> <!-- 凑数行1 -->
+                        <p class="contact-agile2"></p> <!-- 凑数行2 -->
+                        <p class="contact-agile2"></p> <!-- 凑数行3 -->
+                        <button type="submit" value="Login" class="btn btn-primary">登录</button>
+                        <p class="contact-agile2"></p> <!-- 凑数行4 -->
+                        <p class="contact-agile2"></p> <!-- 凑数行5 -->
+                        <p class="contact-agile2"></p> <!-- 凑数行6 -->
+                        <p class="contact-agile2">初始登录密码为：WangSaORZ</p>
+                        <p class="contact-agile2"></p> <!-- 凑数行7 -->
+                        <p class="contact-agile2"></p> <!-- 凑数行8 -->
+                        <p class="contact-agile2"></p> <!-- 凑数行9 -->
+                        <p class="contact-agile2"></p> <!-- 凑数行10 -->
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 contact-w3-agile1" data-aos="flip-right">
+                <h4>联系方式</h4>
+                <p class="contact-agile1"><strong>电话 ：</strong> (+86) 233-2333-2333</p>
+                <p class="contact-agile1"><strong>邮箱 ：</strong> <a href="mailto:name@example.com">16307130146@fudan.edu.cn</a></p>
+                <p class="contact-agile1"><strong>地址 ：</strong> 兵库县神户市滩区篠原本町4-3-1</p>
+
+                <div class="social-bnr-agileits footer-icons-agileinfo">
+                    <script type="text/javascript">
+                        function report(x) {
+                            if (x > 0) {
+                                alert("不存在的网站"+x+"号。", x)
+                            }
+                            else {
+                                alert("凑数用的标签。")
+                            }
+                        }     
+                    </script>                        
+                    <ul class="social-icons3">
+                        <li>
+                            <a href="#" onclick="javascript:report(1)" class="fa fa-facebook icon-border facebook"> </a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="javascript:report(2)" class="fa fa-twitter icon-border twitter"> </a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="javascript:report(3)" class="fa fa-google-plus icon-border googleplus"> </a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="javascript:report(0)" class="fa fa-rss icon-border rss"> </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </section>
+</body>
+
+</html>
