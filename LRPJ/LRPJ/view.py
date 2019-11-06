@@ -7,7 +7,7 @@ from data import models
 
 def home(request):
 	request.session.setdefault('login_user', '???')
-	context ={'error': False}
+	context ={'error': False, 'user_name' : request.session['user_name']}
 	if request.session['login_user'] != '???':
 		return render(request, 'index.html', context)
 	else:
@@ -17,25 +17,28 @@ def home(request):
 def logout(request):
 	request.session['login_user'] = '???'
 	request.session['operator'] = '???'
-	context = {'error': False}
+	request.session['user_name'] = '???'
+	context = {'error': False, 'user_name' : request.session['user_name']}
 	return render(request, 'login.html', context)
 
 
 def login(request):
+	request.session.setdefault('login_user', '???')
+	context = {'error': False, "user_name" : request.session['user_name']}
+
 	if request.session['login_user'] != '???':
 		return render(request, 'index.html', context)
 	if request.method != 'POST':
 		return render(request, 'login.html', context)
-		
-	request.session.setdefault('login_user', '???')
-	context = {'error': False}
 		
 	ID = request.POST.get('ID','')
 	psw = request.POST.get('psw','')
 	s = models.Students.objects.all().filter(student_id = ID, password = psw)
 	if s.exists() :
 		request.session['login_user'] = ID
+		request.session['user_name'] = s.values_list('name', flat = True)[0]
+		context["user_name"] = request.session['user_name']
 		return render(request, 'index.html', context)
 	else :
-		context ={'error': True}
+		context['error'] = True
 		return render(request, 'login.html', context)
