@@ -63,87 +63,93 @@
             </div>
             <div class="w3ls_banner_bottom_grids">
                 <ul class="cbp-ig-grid">
-                    <li>
+                    <li><form action="/choose" method="POST" name="sentMessage" id="contactForm">
+                        {% csrf_token %}
                         {% if request.session.seat.seat1 %}
                         <div class="w3_grid_effect_">
                             <span class="cbp-ig-icon_ w3_cube" onclick="javascript:print_user_info(1)"></span>
-                            <button class="cbp-ig-category">{{ seat.seat1 }}</button>
+                            <button name = 'id'  value = 1 class="cbp-ig-category">{{ seat.seat1 }}</button>
                         </div>
                         {% else %}
                         <div class="w3_grid_effect">
                             <span class="cbp-ig-icon w3_cube" onclick="javascript:print_user_info(1)"></span>
-                            <button class="cbp-ig-category">闲置座位</button>
+                            <button name = 'id'  value = 1 class="cbp-ig-category">闲置座位</button>
                         </div>
                         {% endif %}
-                    </li>
-                    <li>
+                    </form></li>
+                    <li><form action="/choose" method="POST" name="sentMessage" id="contactForm">
+                        {% csrf_token %}
                         {% if request.session.seat.seat2 %}
                         <div class="w3_grid_effect_">
                             <span class="cbp-ig-icon_ w3_cube" onclick="javascript:print_user_info(2)"></span>
-                            <button class="cbp-ig-category">{{ seat.seat2 }}</button>
+                            <button name = 'id'  value = 2 class="cbp-ig-category">{{ seat.seat2 }}</button>
                         </div>
                         {% else %}
                         <div class="w3_grid_effect">
                             <span class="cbp-ig-icon w3_cube" onclick="javascript:print_user_info(2)"></span>
-                            <button class="cbp-ig-category">闲置座位</button>
+                            <button name = 'id'  value = 2 class="cbp-ig-category">闲置座位</button>
                         </div>
                         {% endif %}
-                    </li>
-                    <li>
+                    </form></li>
+                    <li><form action="/choose" method="POST" name="sentMessage" id="contactForm">
+                        {% csrf_token %}
                         {% if request.session.seat.seat3 %}
                         <div class="w3_grid_effect_">
                             <span class="cbp-ig-icon_ w3_cube" onclick="javascript:print_user_info(3)"></span>
-                            <button class="cbp-ig-category">{{ seat.seat3 }}</button>
+                            <button name = 'id'  value = 3 class="cbp-ig-category">{{ seat.seat3 }}</button>
                         </div>
                         {% else %}
                         <div class="w3_grid_effect">
                             <span class="cbp-ig-icon w3_cube" onclick="javascript:print_user_info(3)"></span>
-                            <button class="cbp-ig-category">闲置座位</button>
+                            <button name = 'id'  value = 3 class="cbp-ig-category">闲置座位</button>
                         </div>
                         {% endif %}
-                    </li>
+                    </form></li>
 
                 </ul>
                 <ul class="cbp-ig-grid">
-                    <li>
+                    <li><form action="/choose" method="POST" name="sentMessage" id="contactForm">
+                        {% csrf_token %}
                         {% if request.session.seat.seat4 %}
                         <div class="w3_grid_effect_">
                             <span class="cbp-ig-icon_ w3_cube" onclick="javascript:print_user_info(4)"></span>
-                            <button class="cbp-ig-category">{{ seat.seat4 }}</button>
+                            <button name = 'id'  value = 4 class="cbp-ig-category">{{ seat.seat4 }}</button>
                         </div>
                         {% else %}
                         <div class="w3_grid_effect">
                             <span class="cbp-ig-icon w3_cube" onclick="javascript:print_user_info(4)"></span>
-                            <button class="cbp-ig-category">闲置座位</button>
+                            <button name = 'id'  value = 4 class="cbp-ig-category">闲置座位</button>
                         </div>
                         {% endif %}
-                    </li>
-                    <li>
+                    </form></li>
+                    <li><form action="/choose" method="POST" name="sentMessage" id="contactForm">
+                        {% csrf_token %}
                         {% if request.session.seat.seat5 %}
                         <div class="w3_grid_effect_">
                             <span class="cbp-ig-icon_ w3_cube" onclick="javascript:print_user_info(5)"></span>
-                            <button class="cbp-ig-category">{{ seat.seat5 }}</button>
+                            <button name = 'id'  value = 5 class="cbp-ig-category">{{ seat.seat5 }}</button>
                         </div>
                         {% else %}
                         <div class="w3_grid_effect">
                             <span class="cbp-ig-icon w3_cube" onclick="javascript:print_user_info(5)"></span>
-                            <button class="cbp-ig-category">闲置座位</button>
+                            <button name = 'id'  value = 5 class="cbp-ig-category">闲置座位</button>
                         </div>
                         {% endif %}
-                    </li>
-                    <li>
+                    </form></li>
+                    <li><form action="/choose" method="POST" name="sentMessage" id="contactForm">
+                        {% csrf_token %}
                         {% if request.session.seat.seat6 %}
                         <div class="w3_grid_effect_">
                             <span class="cbp-ig-icon_ w3_cube" onclick="javascript:print_user_info(6)"></span>
-                            <button class="cbp-ig-category">{{ seat.seat6 }}</button>
+                            <button name = 'id'  value = 6 class="cbp-ig-category">{{ seat.seat6 }}</button>
                         </div>
                         {% else %}
                         <div class="w3_grid_effect">
                             <span class="cbp-ig-icon w3_cube" onclick="javascript:print_user_info(6)"></span>
-                            <button class="cbp-ig-category">闲置座位</button>
+                            <button name = 'id'  value = 6 class="cbp-ig-category">闲置座位</button>
                         </div>
                         {% endif %}
-                    </li>
+                    </form></li>
 
                 </ul>
             </div>
