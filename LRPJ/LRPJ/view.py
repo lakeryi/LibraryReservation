@@ -55,7 +55,24 @@ def login(request):
 			pos = 'seat'+str(i)
 			user_info[pos] = '这是一个没人预约的座位'
 			seat[pos] = False
-			seat_ID[pos] = str(104857667123)
+			seat_ID[pos] = str(12147483647)
+
+			p = models.Rent.objects.all().filter(chair = i)
+			if p.exists():
+				ID = p.values_list('student', flat = True)[0]
+				p = models.Students.objects.all().filter(student_id = ID)
+				name = p.values_list('name', flat = True)[0]
+				age = str(p.values_list('age', flat = True)[0])
+				sex = p.values_list('sex', flat = True)[0]
+				if sex == 'M':
+					sex = '男'
+				else:
+					sex = '女'
+				major = p.values_list('major', flat = True)[0]
+				seat_ID[pos] = ID
+				seat[pos] = True
+				user_info[pos] = '姓名：' + name + '\n学号：' + ID + '\n性别：' + sex + '\n专业：' + major + '\n年龄：' + age
+
 		request.session['seat'] = seat
 		request.session['seat_ID'] = seat_ID
 
