@@ -7,7 +7,9 @@ from data import models
 
 def home(request):
 	request.session.setdefault('login_user', '???')
-	context ={'error': False, 'user_name' : request.session['user_name']}
+	request.session.setdefault('user_info', {})
+	request.session.setdefault('seat_ID', {})
+	context ={'error': False, 'login_user' : request.session['login_user'], "user_info" : request.session['user_info'], 'seat' : request.session['seat_ID']}
 	if request.session['login_user'] != '???':
 		return render(request, 'index.html', context)
 	else:
@@ -17,14 +19,16 @@ def home(request):
 def logout(request):
 	request.session['login_user'] = '???'
 	request.session['operator'] = '???'
-	request.session['user_name'] = '???'
-	context = {'error': False, 'user_name' : request.session['user_name']}
+	request.session['user_info'] = ''
+	context = {'error': False}
 	return render(request, 'login.html', context)
 
 
 def login(request):
 	request.session.setdefault('login_user', '???')
-	context = {'error': False, "user_name" : request.session['user_name']}
+	request.session.setdefault('user_info', {})
+	request.session.setdefault('seat_ID', {})
+	context = {'error': False, "login_user" : request.session['login_user'], "user_info" : request.session['user_info'], 'seat' : request.session['seat_ID']}
 
 	if request.session['login_user'] != '???':
 		return render(request, 'index.html', context)
@@ -34,10 +38,35 @@ def login(request):
 	ID = request.POST.get('ID','')
 	psw = request.POST.get('psw','')
 	s = models.Students.objects.all().filter(student_id = ID, password = psw)
+	user_info = {}
 	if s.exists() :
+		name = s.values_list('name', flat = True)[0]
+		age = str(s.values_list('age', flat = True)[0])
+		sex = s.values_list('sex', flat = True)[0]
+		major = s.values_list('major', flat = True)[0]
+		if sex == 'M':
+			sex = '男'
+		else:
+			sex = '女'
+		user_info['login'] = '姓名：' + name + '\n学号：' + ID + '\n性别：' + sex + '\n专业：' + major + '\n年龄：' + age
+		seat = {}
+		seat_ID = {}
+		for i in range(1, 7, 1):
+			pos = 'seat'+str(i)
+			user_info[pos] = '这是一个没人预约的座位'
+			seat[pos] = False
+			seat_ID[pos] = str(104857667123)
+		request.session['seat'] = seat
+		request.session['seat_ID'] = seat_ID
+
+		for item in user_info:
+			user_info[item] = tools.html_printable(user_info[item])
+
 		request.session['login_user'] = ID
-		request.session['user_name'] = s.values_list('name', flat = True)[0]
-		context["user_name"] = request.session['user_name']
+		request.session['user_info'] = user_info
+		context['user_info'] = request.session['user_info']
+		context["login_user"] = request.session['login_user']
+		context['seat'] = request.session['seat_ID']
 		return render(request, 'index.html', context)
 	else :
 		context['error'] = True

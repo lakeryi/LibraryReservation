@@ -5,3 +5,8 @@ def isset(v):
 		return 0 
 	else : 
 		return 1
+
+def html_printable(s):
+	#s = s.replace(' ','_')
+	s = s.replace('\n','WangSaWangSaORZORZWangSaWangSa')
+	return s
