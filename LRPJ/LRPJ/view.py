@@ -40,9 +40,9 @@ def login(request):
 	psw = request.POST.get('psw','')
 	s = models.Students.objects.all().filter(student_id = ID, password = psw)
 	user_info = {}
-	request.session['login_user'] = ID
 
 	if s.exists() :
+		request.session['login_user'] = ID
 		name = s.values_list('name', flat = True)[0]
 		age = str(s.values_list('age', flat = True)[0])
 		sex = s.values_list('sex', flat = True)[0]
