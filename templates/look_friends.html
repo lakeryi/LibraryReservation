@@ -240,11 +240,11 @@
 
 								        		<div class="item-list">
                                                     <div class="avatar avatar-away">
-                                            	        <span class="avatar-title rounded-circle border border-white bg-danger">stu.name</span>
+                                            	        <span class="avatar-title rounded-circle border border-white bg-danger">{{ stu.name.0 }}</span>
                                                     </div>
 											        <div class="info-user ml-3">
-												        <div class="username">stu.name</div>
-												        <div class="status">stu.student_id - stu.major</div>
+												        <div class="username">{{ stu.name }}</div>
+												        <div class="status">{{ stu.student_id }} - {{ stu.major }}</div>
 											        </div>
 
                                                     <input type="radio" name="add_a_friend"
@@ -284,11 +284,11 @@
 
 								        		<div class="item-list">
                                                     <div class="avatar avatar-away">
-                                            	        <span class="avatar-title rounded-circle border border-white bg-danger">stu.name</span>
+                                            	        <span class="avatar-title rounded-circle border border-white bg-danger">{{ stu.name.0 }} </span>
                                                     </div>
 											        <div class="info-user ml-3">
-												        <div class="username">stu.name</div>
-												        <div class="status">stu.student_id - stu.major</div>
+												        <div class="username">{{ stu.name }}</div>
+												        <div class="status">{{ stu.student_id }} - {{ stu.major }}</div>
 											        </div>
 
                                                     <input type="radio" name="add_a_friend"
