@@ -3,8 +3,12 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
+from django.utils import timezone
+
 from . import tools
 from data import models
+import time
+import datetime
 
 def home(request):
 	request.session.setdefault('login_user', '???')
@@ -88,7 +92,7 @@ def login(request):
 		return HttpResponseRedirect('/home')
 	else :
 		context['error'] = True
-		return render(request, 'login.html', context)
+		return HttpResponseRedirect('/login')
 
 		
 def choose_seat(request):
@@ -129,7 +133,15 @@ def choose_seat(request):
 			return render(request, 'index.html', context)
 		p = models.Chairs.objects.all().get(chair_id = chair_id)
 		q = models.Students.objects.all().get(student_id = request.session['login_user'])
-		models.Rent.objects.create(student = q, chair = p, begin_time = '2010-01-01 12:24:48', arrive_time = '2010-01-01 12:24:48', end_time = '2010-01-01 12:24:48')
+
+		begin_time = timezone.now() + datetime.timedelta(hours = 8)
+		arrive_time = begin_time + datetime.timedelta(hours = 1)
+		end_time = arrive_time + datetime.timedelta(hours = 8)
+		print(begin_time)
+		print(arrive_time)
+		print(end_time)
+
+		models.Rent.objects.create(student = q, chair = p, begin_time = begin_time, arrive_time = arrive_time, end_time = end_time)
 		seat[seat_pos] = True
 		seat_ID[seat_pos] = request.session['login_user']
 		user_info[seat_pos] = request.session['user_info']['login']
@@ -139,8 +151,6 @@ def choose_seat(request):
 		context['user_info'] = request.session['user_info']
 		context['seat'] = request.session['seat_ID']
 		return render(request, 'index.html', context)
-
-
 
 def add_friends(request):
 	context = {'error': False}
@@ -153,9 +163,10 @@ def add_friends(request):
 	
 	qid = request.POST.get('add_a_friend')
 	if qid:
+		print(len(qid), 'a\n')
 		q = models.Students.objects.get(pk = qid)
 		models.Friends.objects.create(student0 = cur_user ,student1 = q)
-		render(request, 'add_friends.html', context)
+		return render(request, 'add_friends.html', context)
 	
 	text = request.POST.get('text')
 	selection = request.POST.get('selection')
@@ -166,7 +177,8 @@ def add_friends(request):
 	elif selection == 'stu_name':
 		stu_list1 = models.Students.objects.filter(name = text)
 	for stu in stu_list1:
-		if not models.Friends.objects.filter(student0 = cur_user, student1 = stu):
+		if not ( models.Friends.objects.filter(student0 = cur_user, student1 = stu) \
+			and stu != cur_user ):
 			stu_list.add(stu)
 	if stu_list:
 		context['stu_list'] = stu_list
@@ -191,9 +203,18 @@ def look_friends(request):
 		stu_list = set()
 		for stu in stu_list1:
 			stu_list.add(stu.student1)
-		context['stu_list'] = stu_list
+		context['attention_list'] = stu_list
+	
+	stu_list1 = models.Friends.objects.filter(student1 = cur_user)
+	if stu_list1:
+		stu_list = set()
+		for stu in stu_list1:
+			stu_list.add(stu.student0)
+		context['fan_list'] = stu_list
 		
 	return render(request, 'look_friends.html', context)
+
+
 
 	
 	
