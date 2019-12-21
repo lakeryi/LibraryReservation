@@ -2,17 +2,6 @@
 <html lang="en">
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="keywords" content="" />
-    <script type="application/x-javascript">
-        addEventListener("load", function() {
-            setTimeout(hideURLbar, 0);
-        }, false);
-        function hideURLbar() {
-            window.scrollTo(0, 1);
-        }
-    </script>
 	<title>Home</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<link rel="icon" href="/assets/img/icon.ico" type="image/x-icon"/>
@@ -32,17 +21,6 @@
 	<!-- CSS Files -->
 	<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/assets/css/atlantis.min.css">
-    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="all" />
-    <link href="/assets/css/font-awesome.css" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/chocolat.css" type="text/css" media="screen">
-    <link href="/assets/css/easy-responsive-tabs.css" rel='stylesheet' type='text/css' />
-    <link rel="stylesheet" href="/assets/css/flexslider.css" type="text/css" media="screen" property="" />
-    <link rel="stylesheet" href="/assets/css/jquery-ui.css" />
-    <link href="/assets/css/style.css" rel="stylesheet" type="text/css" media="all" />
-    <script type="text/javascript" src="/assets/js/modernizr-2.6.2.min.js"></script>
-{##}
-    <link href="http://fonts.googleapis.com/css?family=Oswald:300,400,700" rel="stylesheet">
-    <link href="http://fonts.googleapis.com/css?family=Federo" rel="stylesheet">
 
 	<!-- CSS Just for demo purpose, don't include it in your project -->
 	<link rel="stylesheet" href="/assets/css/demo.css">
@@ -139,8 +117,8 @@
 						<div class="info">
 							<a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
 								<span>
-									Hizrian
-									<span class="user-level">Student</span>
+									Cheryl
+									<span class="user-level">Admin</span>
 									<span class="caret"></span>
 								</span>
 							</a>
@@ -177,60 +155,30 @@
 						<li class="nav-item">
 							<a data-toggle="collapse" href="#base">
 								<i class="fas fa-layer-group"></i>
-								<p>Seat Reservation</p>
+								<p>Classroom Management</p>
 								<span class="caret"></span>
 							</a>
 							<div class="collapse" id="base">
 								<ul class="nav nav-collapse">
 									<li>
 										<a href="components/avatars.html">
-											<span class="sub-item">Book a Seat</span>
+											<span class="sub-item">Create a Classroom</span>
 										</a>
 									</li>
 									<li>
 										<a href="components/buttons.html">
-											<span class="sub-item">Cancel a Seat</span>
+											<span class="sub-item">Delete a Classroom</span>
 										</a>
 									</li>
-									<li>
-										<a href="components/gridsystem.html">
-											<span class="sub-item">Reservation History</span>
-										</a>
-									</li>
-									<li>
-										<a href="components/panels.html">
-											<span class="sub-item">Rules</span>
+                                    <li>
+										<a href="components/buttons.html">
+											<span class="sub-item">Look a Classroom</span>
 										</a>
 									</li>
 								</ul>
 							</div>
 						</li>
-						<li class="nav-item">
-							<a data-toggle="collapse" href="#sidebarLayouts">
-								<i class="fas fa-th-list"></i>
-								<p>Attention</p>
-								<span class="caret"></span>
-							</a>
-							<div class="collapse" id="sidebarLayouts">
-								<ul class="nav nav-collapse">
-									<li>
-										<a href="sidebar-style-1.html">
-											<span class="sub-item">My Attention</span>
-										</a>
-									</li>
-									<li>
-										<a href="overlay-sidebar.html">
-											<span class="sub-item">My Fan</span>
-										</a>
-									</li>
-									<li>
-										<a href="compact-sidebar.html">
-											<span class="sub-item">Add an Attention</span>
-										</a>
-									</li>
-								</ul>
-							</div>
-						</li>
+
 					</ul>
 				</div>
 			</div>
@@ -242,97 +190,108 @@
 				<div class="page-inner">
 					<div class="mt-2 mb-4">
 						<h2 class="text-white pb-2">Welcome back, Hizrian!</h2>
-						<h5 class="text-white op-7 mb-4">Book your seat and find your friends!</h5>
+						<h5 class="text-white op-7 mb-4">Create a new classroom!</h5>
 					</div>
 
 
 
 					<div class="row">
-						<div class="col-md-12">
+						<div class="col-md-4">
 							<div class="card">
 								<div class="card-header">
-									<div class="card-title">Book a Seat</div>
+									<div class="card-title">Please input the number of row and column!</div>
 								</div>
 								<div class="card-body pb-0">
-                                <div class="input-group">
 
-                                            <select name="selection">
+                                    <form action="/add_friends" method="POST">
+                                        {% csrf_token %}
 
-                                        <option value="stu_id"> 9</option>
+                                        <div class="input-group">
 
-                                        <option value="stu_name">10</option>
-                                                <option value="stu_name">11</option>
-                                                <option value="stu_name">12</option>
-                                                <option value="stu_name">13</option>
-                                                <option value="stu_name">14</option>
-                                                <option value="stu_name">15</option>
-                                                <option value="stu_name">16</option>
-                                                <option value="stu_name">17</option>
-                                                <option value="stu_name">18</option>
-                                                <option value="stu_name">19</option>
-                                                <option value="stu_name">20</option>
-                                                <option value="stu_name">21</option>
-                                        </select>
-                                    <select name="selection">
-
-                                        <option value="stu_id"> 9</option>
-
-                                        <option value="stu_name">10</option>
-                                                <option value="stu_name">11</option>
-                                                <option value="stu_name">12</option>
-                                                <option value="stu_name">13</option>
-                                                <option value="stu_name">14</option>
-                                                <option value="stu_name">15</option>
-                                                <option value="stu_name">16</option>
-                                                <option value="stu_name">17</option>
-                                                <option value="stu_name">18</option>
-                                                <option value="stu_name">19</option>
-                                                <option value="stu_name">20</option>
-                                                <option value="stu_name">21</option>
-                                        </select>
-                                    <select name="selection">
-
-                                        <option value="stu_id">Today</option>
-
-                                        <option value="stu_name"> Tomorrow</option>
-                                        </select>
+                                            <input type="text" placeholder="input Classroom ID..." class="form-control" name="text" value="">
 
 							            </div>
-                                <script language="javascript">
-
-                                var arr=[[1,0,0,0,0,0,0],[1,1,0,0,0,0,0],[1,1,1,0,0,0,0],[1,1,1,1,0,0,0],[1,1,1,1,1,0,0],[1,1,1,1,1,1,0],[1,1,1,1,1,1,1]];
-
-                                for (var i=0;i<arr.length;i++) {
-                                    document.write("<ul class=\"cbp-ig-grid\">")
-
-                                    for (var j = 0; j < arr[i].length; j++) {
-                                        if (arr[i][j] == 1) {
 
 
-                                            document.write("<li><form action=\"/choose_seat\" method=\"POST\" name=\"sentMessage\" id=\"contactForm\">")
-                                            document.write("<div class=\"w3_grid_effect\">")
-                                            document.write("<span class=\"cbp-ig-icon w3_cube\" onclick=\"javascript:print_user_info(1)\"></span>")
-                                            document.write("<button name = \"id\"  value = 1 class=\"cbp-ig-category\">Free</button>")
-                                            document.write("</div>")
-                                            document.write(" </form></li>")
-                                        }
-                                        else {
-                                            document.write("<li><form action=\"/choose_seat\" method=\"POST\" name=\"sentMessage\" id=\"contactForm\">" +
-                                                "                        <div class=\"w3_grid_effect_space\">" +
-                                                "                        <span class=\"cbp-ig-icon_ w3_road\" onclick=\"javascript:print_user_info(1)\"></span>" +
-                                                "                        </div>" +
-                                                "                </form></li>");
-                                        }
-                                    }
-                                    document.write("</ul>")
-                                }
+                                        <div class="input-group">
+
+                                            <input type="text" placeholder="input row..." class="form-control" name="text" value="">
+
+							            </div>
+
+                                        <div class="input-group">
+
+                                            <input type="text" placeholder="input column..." class="form-control" name="text" value="">
+                                            <div class="input-group-sm">
+
+								            </div>
+							            </div>
+                                        <div align="center"><button type="submit" class="btn btn-search mt-3">
+										            generate map
+									            </button></div>
 
 
-                                </script>
 
-{#                                    {% autoescape off %}#}
-{#                                    {{ part }}#}
-{#                                    {% endautoescape %}#}
+
+
+                                    </form>
+
+								</div>
+							</div>
+						</div>
+                        <div class="col-md-8">
+							<div class="card">
+								<div class="card-body">
+                                     {% if not stu_list %}  {# 需要改 #}
+                                            <div class="card-title fw-mediumbold">Impossible Row or Column</div>
+                                     {% else %}
+                                         <div class="card-title fw-mediumbold">Generate Map</div>
+
+                                         <form action="/add_friends" method="POST">
+                                            {% csrf_token %}
+
+                                            <div align="center">
+                                                <script language="JavaScript">
+
+                                                    document.write("<form style=\"float:left;\" action=\"/generate_seat\" method=\"get\"> \
+                                                                                </form>") {# 跳回本界面 #}
+
+                                                    var arr=[[0,0,0,0,0,0],[0,1,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]]
+                                                    for (var i=0;i<arr.length;i++) {
+                                                        document.write("<br>")
+
+                                                        for (var j = 0; j < arr[i].length-1; j++) {
+                                                            {#document.write("<br>")#}
+                                                            if (arr[i][j] == 1) {
+                                                                document.write("<form style=\"display:inline;\" action=\"/generate_seat\" method=\"get\">\
+                                                                                <button type=\"submit\" class=\"btn btn-sm mt-3\">C</button></form>") {# 跳回本界面 #}
+                                                            }
+                                                            else{
+                                                                document.write("<form style=\"display:inline;\" action=\"/generate_seat\" method=\"get\">\
+                                                                                <button type=\"submit\" class=\"btn btn-sm mt-3\">S</button></form>")
+                                                            }
+
+                                                            }
+                                                        document.write("</br>")
+
+
+                                                    }
+
+                                                </script>
+                                            </div>
+
+
+                                             <div style="text-align: right;">
+                                                 <button type="submit" class="btn btn-xs mt-5 pl-5 pr-4">
+                                                     Create the Classroom!
+                                                 </button>
+                                             </div>
+
+                                         </form>
+
+                                     {% endif %}
+
+
 								</div>
 							</div>
 						</div>

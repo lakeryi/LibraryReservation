@@ -76,13 +76,14 @@ class AuthUserUserPermissions(models.Model):
 
 class Chairs(models.Model):
     chair_id = models.BigIntegerField(primary_key=True)
-    floor = models.BigIntegerField()
-    room = models.BigIntegerField()
-    table = models.BigIntegerField()
+    row = models.IntegerField(blank=True, null=True)
+    col = models.IntegerField(blank=True, null=True)
+    room = models.ForeignKey('Rooms', models.DO_NOTHING, db_column='room')
 
     class Meta:
         managed = False
         db_table = 'chairs'
+        unique_together = (('chair_id', 'room'),)
 
 
 class DjangoAdminLog(models.Model):
@@ -129,12 +130,23 @@ class DjangoSession(models.Model):
         db_table = 'django_session'
 
 
+class Friends(models.Model):
+    student0 = models.OneToOneField('Students', on_delete = models.CASCADE, related_name = 'out')
+    student1 = models.OneToOneField('Students', on_delete = models.CASCADE)
+
+    class Meta:
+        managed = False
+        db_table = 'friends'
+        unique_together = (('student0', 'student1'),)
+
+
 class Rent(models.Model):
-    begin_time = models.DateTimeField()
     chair = models.ForeignKey(Chairs, models.DO_NOTHING, db_column='chair', primary_key=True)
     student = models.ForeignKey('Students', models.DO_NOTHING, db_column='student')
-    arrive_time = models.DateTimeField()
-    end_time = models.DateTimeField()
+    begin_time = models.DateTimeField(blank=True, null=True)
+    arrive_time = models.DateTimeField(blank=True, null=True)
+    end_time = models.DateTimeField(blank=True, null=True)
+    is_active = models.IntegerField()
 
     class Meta:
         managed = False
@@ -142,18 +154,26 @@ class Rent(models.Model):
         unique_together = (('chair', 'student'),)
 
 
+class Rooms(models.Model):
+    room_id = models.BigIntegerField(primary_key=True)
+    row = models.IntegerField(blank=True, null=True)
+    col = models.IntegerField(blank=True, null=True)
+    availble_number = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'rooms'
+
+
 class Students(models.Model):
     student_id = models.CharField(primary_key=True, max_length=45)
-    name = models.CharField(max_length=45)
-    age = models.IntegerField()
-    sex = models.CharField(max_length=1)
-    major = models.CharField(max_length=45)
+    name = models.CharField(max_length=45, blank=True, null=True)
+    age = models.IntegerField(blank=True, null=True)
+    sex = models.CharField(max_length=1, blank=True, null=True)
+    major = models.CharField(max_length=45, blank=True, null=True)
     password = models.CharField(max_length=128)
-	
+    is_admin = models.IntegerField()
+
     class Meta:
         managed = False
         db_table = 'students'
-
-class Friends(models.Model):
-	student0 = models.OneToOneField('Students', on_delete = models.CASCADE, related_name = 'out')
-	student1 = models.OneToOneField('Students', on_delete = models.CASCADE)

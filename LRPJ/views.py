@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from . import tools
-from data import models
+from library_reservation import models
 import time
 import datetime
 
