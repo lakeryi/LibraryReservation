@@ -31,6 +31,30 @@ def logout(request):
 	return HttpResponseRedirect('/login')
 
 
+def change_password(request):
+	request.session.setdefault('login_user', '???')
+	request.session.setdefault('user_name', 'none')
+	request.session.setdefault('user_info', {})
+	request.session.setdefault('seat', {})
+	request.session.setdefault('seat_ID', {})
+	context = {'error': False, "login_user" : request.session['login_user'], "user_info" : request.session['user_info'], 'seat' : request.session['seat_ID'],  'user_name' : request.session['user_name']}
+	if request.session['login_user'] == '???' :
+		return HttpResponseRedirect('/login')
+	if request.method != 'POST' :
+		return render(request, 'change_password.html', context)
+	old = request.POST.get('old','')
+	new = request.POST.get('new','')
+	repeat = request.POST.get('repeat','')
+	s = models.Students.objects.all().filter(student_id = request.session['login_user'])
+	if s.values_list('password', flat = True)[0] != old or new != repeat:
+		context['error'] = True
+		return render(request, 'change_password.html', context)
+
+	s.update(password = new)
+
+	return HttpResponseRedirect('/home')
+
+
 def login(request):
 	request.session.setdefault('login_user', '???')
 	request.session.setdefault('user_name', 'none')
@@ -46,10 +70,10 @@ def login(request):
 		
 	ID = request.POST.get('ID','')
 	psw = request.POST.get('psw','')
-	s = models.Students.objects.all().filter(student_id = ID, password = psw)
+	s = models.Students.objects.all().filter(student_id = ID)
 	user_info = {}
 
-	if s.exists() :
+	if s.exists() and s.values_list('password', flat = True)[0] == psw :
 		request.session['login_user'] = ID
 		name = s.values_list('name', flat = True)[0]
 		request.session['user_name'] = name
@@ -92,7 +116,7 @@ def login(request):
 		return HttpResponseRedirect('/home')
 	else :
 		context['error'] = True
-		return HttpResponseRedirect('/login')
+		return render(request, 'login.html', context)
 
 		
 def choose_seat(request):
@@ -137,9 +161,6 @@ def choose_seat(request):
 		begin_time = timezone.now() + datetime.timedelta(hours = 8)
 		arrive_time = begin_time + datetime.timedelta(hours = 1)
 		end_time = arrive_time + datetime.timedelta(hours = 8)
-		print(begin_time)
-		print(arrive_time)
-		print(end_time)
 
 		models.Rent.objects.create(student = q, chair = p, begin_time = begin_time, arrive_time = arrive_time, end_time = end_time)
 		seat[seat_pos] = True
@@ -234,7 +255,55 @@ def input(request):
         column: <input type=\"text\" name=\"column\"><br>\
         <input type=\"submit\" value=\"submit\">\
         </form>"
-    return HttpResponse(str)
+    context = {}
+    stu_list = [{'name':'a','student_id':123,'major':'cs'},{'name':'a','student_id':12,'major':'cs'},{'name':'a','student_id':1,'major':'cs'}]
+    context['stu_list'] = stu_list
+    # context['row'] = [0,1,2]
+    # context['column'] = [0,1,2,3,4]
+    # context['rows'] = [0,1,1,2]
+    # context['columns'] = [0,2,3,4]
+    # context['loc'] = [(0,0),(1,2),(1,3),(2,4)]
+    # context['seat_num'] = [0,1,2,3]
+    location = [(0,0),(1,2),(1,3),(2,4),(3,3),(4,4),(5,5),(6,6),(7,7),(8,8),(9,9)]
+
+    one_seat_free = "<li><form action=\"/choose_seat\" method=\"POST\" name=\"sentMessage\" id=\"contactForm\">\
+						{% csrf_token %}\
+                        <div class=\"w3_grid_effect_\">\
+                        <span class=\"cbp-ig-icon_ w3_cube\" onclick=\"javascript:print_user_info(1)\"></span>\
+                        <button name = \"id\"  value = 1 class=\"cbp-ig-category\">{{ seat.seat1 }}</button>\
+                        </div>\
+                </form></li>"
+    one_seat_busy = "<li><form action=\"/choose_seat\" method=\"POST\" name=\"sentMessage\" id=\"contactForm\">\
+							{% csrf_token %}\
+                            <div class=\"w3_grid_effect\">\
+                                <span class=\"cbp-ig-icon w3_cube\" onclick=\"javascript:print_user_info(1)\"></span>\
+                                <button name = \"id\"  value = 1 class=\"cbp-ig-category\">Free</button>\
+                            </div>\
+                    </form></li>"
+
+    no_seat = "<li><form action=\"/choose_seat\" method=\"POST\" name=\"sentMessage\" id=\"contactForm\">\n\
+                        <div class=\"w3_grid_effect_space\">\n\
+                        <span class=\"cbp-ig-icon_ w3_road\" onclick=\"javascript:print_user_info(1)\"></span>\n\
+                        </div>\n\
+                </form></li>"
+    part = ""
+    seat_available=[0]*100
+    for r in range(10):
+        part = part+"<ul class=\"cbp-ig-grid\">"
+        for c in range(10):
+            if (r,c) in location:
+                if seat_available[r*10+c]:
+                    part = part + one_seat_free
+                else:
+                    part = part+one_seat_busy
+
+            else:
+                part = part + no_seat
+        part = part+"</ul>"
+
+    context['part'] = part
+
+    return render(request, 'book_seat_int.html',context)#HttpResponse(str)
 
 def generate_form_unit(attr):
     form = "<form "
@@ -323,7 +392,7 @@ def generate_seat(request):
 
 def final_map(request):
     output_form_list = []
-    one_seat = "<li><form action=\"/choose\" method=\"POST\" name=\"sentMessage\" id=\"contactForm\">\
+    one_seat = "<li><form action=\"/choose_seat\" method=\"POST\" name=\"sentMessage\" id=\"contactForm\">\
                         {% csrf_token %}\
                         {% if request.session.seat.seat1 %}\
                         <div class=\"w3_grid_effect_\">\
@@ -337,7 +406,7 @@ def final_map(request):
                         </div>\
                         {% endif %}\
                     </form></li>"
-    no_seat = "<li><form action=\"/choose\" method=\"POST\" name=\"sentMessage\" id=\"contactForm\">\
+    no_seat = "<li><form action=\"/choose_seat\" method=\"POST\" name=\"sentMessage\" id=\"contactForm\">\
                         {% csrf_token %}\
                         {% if request.session.seat.seat1 %}\
                         <div class=\"w3_grid_effect_\">\

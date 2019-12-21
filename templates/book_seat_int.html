@@ -254,9 +254,85 @@
 									<div class="card-title">Book a Seat</div>
 								</div>
 								<div class="card-body pb-0">
-                                    {% autoescape off %}
-                                    {{ part }}
-                                    {% endautoescape %}
+                                <div class="input-group">
+
+                                            <select name="selection">
+
+                                        <option value="stu_id"> 9</option>
+
+                                        <option value="stu_name">10</option>
+                                                <option value="stu_name">11</option>
+                                                <option value="stu_name">12</option>
+                                                <option value="stu_name">13</option>
+                                                <option value="stu_name">14</option>
+                                                <option value="stu_name">15</option>
+                                                <option value="stu_name">16</option>
+                                                <option value="stu_name">17</option>
+                                                <option value="stu_name">18</option>
+                                                <option value="stu_name">19</option>
+                                                <option value="stu_name">20</option>
+                                                <option value="stu_name">21</option>
+                                        </select>
+                                    <select name="selection">
+
+                                        <option value="stu_id"> 9</option>
+
+                                        <option value="stu_name">10</option>
+                                                <option value="stu_name">11</option>
+                                                <option value="stu_name">12</option>
+                                                <option value="stu_name">13</option>
+                                                <option value="stu_name">14</option>
+                                                <option value="stu_name">15</option>
+                                                <option value="stu_name">16</option>
+                                                <option value="stu_name">17</option>
+                                                <option value="stu_name">18</option>
+                                                <option value="stu_name">19</option>
+                                                <option value="stu_name">20</option>
+                                                <option value="stu_name">21</option>
+                                        </select>
+                                    <select name="selection">
+
+                                        <option value="stu_id">Today</option>
+
+                                        <option value="stu_name"> Tomorrow</option>
+                                        </select>
+
+							            </div>
+                                <script language="javascript">
+
+                                var arr=[[1,0,0,0,0,0,0],[1,1,0,0,0,0,0],[1,1,1,0,0,0,0],[1,1,1,1,0,0,0],[1,1,1,1,1,0,0],[1,1,1,1,1,1,0],[1,1,1,1,1,1,1]];
+
+                                for (var i=0;i<arr.length;i++) {
+                                    document.write("<ul class=\"cbp-ig-grid\">")
+
+                                    for (var j = 0; j < arr[i].length; j++) {
+                                        if (arr[i][j] == 1) {
+
+
+                                            document.write("<li><form action=\"/choose\" method=\"POST\" name=\"sentMessage\" id=\"contactForm\">")
+                                            document.write("<div class=\"w3_grid_effect\">")
+                                            document.write("<span class=\"cbp-ig-icon w3_cube\" onclick=\"javascript:print_user_info(1)\"></span>")
+                                            document.write("<button name = \"id\"  value = 1 class=\"cbp-ig-category\">Free</button>")
+                                            document.write("</div>")
+                                            document.write(" </form></li>")
+                                        }
+                                        else {
+                                            document.write("<li><form action=\"/choose\" method=\"POST\" name=\"sentMessage\" id=\"contactForm\">" +
+                                                "                        <div class=\"w3_grid_effect_space\">" +
+                                                "                        <span class=\"cbp-ig-icon_ w3_road\" onclick=\"javascript:print_user_info(1)\"></span>" +
+                                                "                        </div>" +
+                                                "                </form></li>");
+                                        }
+                                    }
+                                    document.write("</ul>")
+                                }
+
+
+                                </script>
+
+{#                                    {% autoescape off %}#}
+{#                                    {{ part }}#}
+{#                                    {% endautoescape %}#}
 								</div>
 							</div>
 						</div>

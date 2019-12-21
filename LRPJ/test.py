@@ -21,20 +21,20 @@ def input(request):
     # context['seat_num'] = [0,1,2,3]
     location = [(0,0),(1,2),(1,3),(2,4),(3,3),(4,4),(5,5),(6,6),(7,7),(8,8),(9,9)]
 
-    one_seat_free = "<li><form action=\"/choose\" method=\"POST\" name=\"sentMessage\" id=\"contactForm\">\
+    one_seat_free = "<li><form action=\"/choose_seat\" method=\"POST\" name=\"sentMessage\" id=\"contactForm\">\
                         <div class=\"w3_grid_effect_\">\
                         <span class=\"cbp-ig-icon_ w3_cube\" onclick=\"javascript:print_user_info(1)\"></span>\
                         <button name = \"id\"  value = 1 class=\"cbp-ig-category\">{{ seat.seat1 }}</button>\
                         </div>\
                 </form></li>"
-    one_seat_busy = "<li><form action=\"/choose\" method=\"POST\" name=\"sentMessage\" id=\"contactForm\">\
+    one_seat_busy = "<li><form action=\"/choose_seat\" method=\"POST\" name=\"sentMessage\" id=\"contactForm\">\
                             <div class=\"w3_grid_effect\">\
                                 <span class=\"cbp-ig-icon w3_cube\" onclick=\"javascript:print_user_info(1)\"></span>\
                                 <button name = \"id\"  value = 1 class=\"cbp-ig-category\">Free</button>\
                             </div>\
                     </form></li>"
 
-    no_seat = "<li><form action=\"/choose\" method=\"POST\" name=\"sentMessage\" id=\"contactForm\">\n\
+    no_seat = "<li><form action=\"/choose_seat\" method=\"POST\" name=\"sentMessage\" id=\"contactForm\">\n\
                         <div class=\"w3_grid_effect_space\">\n\
                         <span class=\"cbp-ig-icon_ w3_road\" onclick=\"javascript:print_user_info(1)\"></span>\n\
                         </div>\n\
@@ -145,7 +145,7 @@ def generate_seat(request):
 
 def final_map(request):
     output_form_list = []
-    one_seat = "<li><form action=\"/choose\" method=\"POST\" name=\"sentMessage\" id=\"contactForm\">\
+    one_seat = "<li><form action=\"/_seat\" method=\"POST\" name=\"sentMessage\" id=\"contactForm\">\
                         {% csrf_token %}\
                         {% if request.session.seat.seat1 %}\
                         <div class=\"w3_grid_effect_\">\
@@ -159,7 +159,7 @@ def final_map(request):
                         </div>\
                         {% endif %}\
                     </form></li>"
-    no_seat = "<li><form action=\"/choose\" method=\"POST\" name=\"sentMessage\" id=\"contactForm\">\
+    no_seat = "<li><form action=\"/choose_seat\" method=\"POST\" name=\"sentMessage\" id=\"contactForm\">\
                         {% csrf_token %}\
                         {% if request.session.seat.seat1 %}\
                         <div class=\"w3_grid_effect_\">\
