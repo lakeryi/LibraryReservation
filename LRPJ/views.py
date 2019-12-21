@@ -11,12 +11,7 @@ import time
 import datetime
 
 def home(request):
-	request.session.setdefault('login_user', '???')
-	request.session.setdefault('user_name', 'none')
-	request.session.setdefault('user_info', {})
-	request.session.setdefault('seat', {})
-	request.session.setdefault('seat_ID', {})
-	context = {'error': False, "login_user" : request.session['login_user'], "user_info" : request.session['user_info'], 'seat' : request.session['seat_ID'],  'user_name' : request.session['user_name']}
+	context = tools.init(request)
 	if request.session['login_user'] != '???':
 		return render(request, 'main_menu.html', context)
 	else:
@@ -25,19 +20,15 @@ def home(request):
 
 def logout(request):
 	request.session['login_user'] = '???'
-	request.session['user_info'] = ''
-	request.session['user_name'] = ''
-	context = {'error': False}
+	request.session['user_name'] = 'none'
+	request.session['user_info'] = {}
+	request.session['seat_info'] = []
+	request.session['room'] = 'none'
 	return HttpResponseRedirect('/login')
 
 
 def change_password(request):
-	request.session.setdefault('login_user', '???')
-	request.session.setdefault('user_name', 'none')
-	request.session.setdefault('user_info', {})
-	request.session.setdefault('seat', {})
-	request.session.setdefault('seat_ID', {})
-	context = {'error': False, "login_user" : request.session['login_user'], "user_info" : request.session['user_info'], 'seat' : request.session['seat_ID'],  'user_name' : request.session['user_name']}
+	context = tools.init(request)
 	if request.session['login_user'] == '???' :
 		return HttpResponseRedirect('/login')
 	if request.method != 'POST' :
@@ -56,12 +47,7 @@ def change_password(request):
 
 
 def login(request):
-	request.session.setdefault('login_user', '???')
-	request.session.setdefault('user_name', 'none')
-	request.session.setdefault('user_info', {})
-	request.session.setdefault('seat', {})
-	request.session.setdefault('seat_ID', {})
-	context = {'error': False, "login_user" : request.session['login_user'], "user_info" : request.session['user_info'], 'seat' : request.session['seat_ID'],  'user_name' : request.session['user_name']}
+	context = tools.init(request)
 
 	if request.session['login_user'] != '???':
 		return HttpResponseRedirect('/home')
@@ -70,111 +56,98 @@ def login(request):
 		
 	ID = request.POST.get('ID','')
 	psw = request.POST.get('psw','')
-	s = models.Students.objects.all().filter(student_id = ID)
-	user_info = {}
+	s = tools.ID_to_dist(ID)
 
-	if s.exists() and s.values_list('password', flat = True)[0] == psw :
-		request.session['login_user'] = ID
-		name = s.values_list('name', flat = True)[0]
-		request.session['user_name'] = name
-		age = str(s.values_list('age', flat = True)[0])
-		sex = s.values_list('sex', flat = True)[0]
-		major = s.values_list('major', flat = True)[0]
-		if sex == 'M':
-			sex = '男'
-		else:
-			sex = '女'
-		user_info['login'] = '姓名：' + name + '\n学号：' + ID + '\n性别：' + sex + '\n专业：' + major + '\n年龄：' + age
-		seat = {}
-		seat_ID = {}
-		for i in range(1, 7, 1):
-			pos = 'seat'+str(i)
-			user_info[pos] = '这是一个没人预约的座位'
-			seat[pos] = False
-			seat_ID[pos] = str(12147483647)
-
-			p = models.Rent.objects.all().filter(chair = i)
-			if p.exists():
-				ID = p.values_list('student', flat = True)[0]
-				p = models.Students.objects.all().filter(student_id = ID)
-				name = p.values_list('name', flat = True)[0]
-				age = str(p.values_list('age', flat = True)[0])
-				sex = p.values_list('sex', flat = True)[0]
-				if sex == 'M':
-					sex = '男'
-				else:
-					sex = '女'
-				major = p.values_list('major', flat = True)[0]
-				seat_ID[pos] = ID
-				seat[pos] = True
-				user_info[pos] = '姓名：' + name + '\n学号：' + ID + '\n性别：' + sex + '\n专业：' + major + '\n年龄：' + age
-
-		request.session['user_info'] = user_info
-		request.session['seat'] = seat
-		request.session['seat_ID'] = seat_ID
-
+	if s['exists'] and s['psw'] == psw :
+		s.pop('psw')
+		s.pop('exists')
+		request.session['login_user'] = s['ID']
+		request.session['user_name'] = s['name']
+		request.session['user_info'] = s
 		return HttpResponseRedirect('/home')
 	else :
 		context['error'] = True
 		return render(request, 'login.html', context)
 
 		
-def choose_seat(request):
-	request.session.setdefault('login_user', '???')
-	request.session.setdefault('user_info', {})
-	request.session.setdefault('seat', {})
-	request.session.setdefault('seat_ID', {})
-	context = {'error': False, "login_user" : request.session['login_user'], "user_info" : request.session['user_info'], 'seat' : request.session['seat_ID'],  'user_name' : request.session['user_name']}
+def choose_room(request):
+	contex = tools.init(request)
 
 	if request.session['login_user'] == '???':
 		return HttpResponseRedirect('/login')
 	if request.method != 'POST':
-		return render(request, 'index.html', context)
-		
-	chair_id = int(request.POST.get('id',''))
-	seat_pos = 'seat' + str(chair_id)
-	seat = request.session['seat']
-	seat_ID = request.session['seat_ID']
-	user_info = request.session['user_info']
+		return HttpResponseRedirect('/home')
+
+	room_id = request.POST.get('room', '')
+	request.session['room'] = room_id
+	s = models.Rooms.objects.all().filter(room_id = room_id)
+	total_row = s.values_list('row', flat = True)[0]
+	total_col = s.values_list('col', flat = True)[0]
+	seat_info = []
+	for i in range(total_row * total_col):
+		seat_info.append({'exists' : False, 'rent' : False, 'chair' : 0, 'user' : 'none'})
+	s = models.Chairs.objects.all().fliter(room_id = room_id)
+
+	for i in range(len(s)):
+		pos = s[i].row * total_col + s[i].col
+		seat_info[pos]['exists'] = True
+		seat_info[pos]['chair'] = s[i].chair_id
 	
-	if request.session['seat'][seat_pos]:
-		if seat_ID[seat_pos] != request.session['login_user']:
-			return render(request, 'index.html', context)
+	request.seat_info = seat_info
+	return HttpResponseRedirect('/choose_seat')
+
+
+def choose_seat(request):
+	context = tools.init(request)
+
+	if request.session['login_user'] == '???':
+		return HttpResponseRedirect('/login')
+	if request.method != 'POST':
+		return render(request, 'book_seat_int.html', context)
+		
+	room_id = request.session['room']
+	row = int(request.POST.get('row', ''))
+	col = int(request.POST.get('col', ''))
+
+	s = models.Rooms.objects.all().filter(room_id = room_id)
+	total_col = s.values_list('col', flat = True)[0]
+	pos = row * total_col + col
+
+	seat_info = request.session['seat_info']
+	
+	if not seat_info[pos]['exists']:
+		return render(request, 'book_seat_int.html', context)
+	elif seat_info[pos]['rent']:
+		if seat_info[pos]['user'] != request.session['login_user']:
+			return render(request, 'book_seat_int.html', context)
 		else:
 			models.Rent.objects.filter(student = request.session['login_user']).delete()
-			seat[seat_pos] = False
-			seat_ID[seat_pos] = str(2147483647)
-			user_info[seat_pos] = '这是一个没人预约的座位'
-			request.session['seat'] = seat
-			request.session['seat_ID'] = seat_ID
-			request.session['user_info'] = user_info
-			context['user_info'] = request.session['user_info']
-			context['seat'] = request.session['seat_ID']
-			return render(request, 'index.html', context)
+			seat_info[pos]['rent'] = False
+			seat_info[pos]['user'] = 'none'
+			request.session['seat_info'] = seat_info
+			context['seat_info'] = request.session['seat_info']
+			return render(request, 'book_seat_int.html', context)
 	else:
-		s = models.Rent.objects.all().filter(student = request.session['login_user'])
+		s = models.Rent.objects.all().filter(student = request.session['login_user'], is_active = 1)
 		if s.exists():
-			return render(request, 'index.html', context)
-		p = models.Chairs.objects.all().get(chair_id = chair_id)
+			return render(request, 'book_seat_int.html', context)
+		p = models.Chairs.objects.all().get(chair_id = seat_info[pos]['chair'])
 		q = models.Students.objects.all().get(student_id = request.session['login_user'])
 
 		begin_time = timezone.now() + datetime.timedelta(hours = 8)
 		arrive_time = begin_time + datetime.timedelta(hours = 1)
 		end_time = arrive_time + datetime.timedelta(hours = 8)
 
-		models.Rent.objects.create(student = q, chair = p, begin_time = begin_time, arrive_time = arrive_time, end_time = end_time)
-		seat[seat_pos] = True
-		seat_ID[seat_pos] = request.session['login_user']
-		user_info[seat_pos] = request.session['user_info']['login']
-		request.session['seat'] = seat
-		request.session['seat_ID'] = seat_ID
-		request.session['user_info'] = user_info
-		context['user_info'] = request.session['user_info']
-		context['seat'] = request.session['seat_ID']
-		return render(request, 'index.html', context)
+		models.Rent.objects.create(student = q, chair = p, begin_time = begin_time, arrive_time = arrive_time, end_time = end_time, is_active = 1)
+		seat_info[pos]['rent'] = True
+		seat_info[pos]['user'] = request.session['login_user']
+		request.session['seat_info'] = seat_info
+		context['seat_info'] = request.session['seat_info']
+		return render(request, 'book_seat_int.html', context)
 
 def add_friends(request):
-	context = {'error': False}
+	context = tools.init(request)
+
 	cur_user_id = request.session['login_user']
 	cur_user = models.Students.objects.get(pk = cur_user_id)
 	if cur_user_id == '???':
@@ -182,6 +155,7 @@ def add_friends(request):
 	if request.method != 'POST':
 		return render(request, 'add_friends.html', context)
 	
+
 	qid = request.POST.get('add_a_friend')
 	if qid:
 		print(len(qid), 'a\n')
@@ -207,7 +181,8 @@ def add_friends(request):
 	return render(request, 'add_friends.html', context)
 
 def look_friends(request):
-	context = {'error': False}
+	context = tools.init(request)
+
 	cur_user_id = request.session['login_user']
 	cur_user = models.Students.objects.get(pk = cur_user_id)
 	if cur_user_id == '???':
@@ -236,14 +211,7 @@ def look_friends(request):
 	return render(request, 'look_friends.html', context)
 
 
-
-	
-	
-	
-	
-	
-	
-
+# broderline
 
 
 def hello(request):
@@ -312,10 +280,7 @@ def generate_form_unit(attr):
     form = form + "action=\"/generate_seat\" method=\"get\">\
                     <input type=\"submit\" value=\"" + attr['value'] + "\" name = \"" + attr['name'] + "\"></form>"
     return form
-output_form_list = []
-seat_location = []
-r = -1
-c = -1
+
 def search(request):
     global r
     global c
