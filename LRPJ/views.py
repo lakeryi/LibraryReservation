@@ -8,10 +8,11 @@ from data import models
 
 def home(request):
 	request.session.setdefault('login_user', '???')
+	request.session.setdefault('user_name', 'none')
 	request.session.setdefault('user_info', {})
 	request.session.setdefault('seat', {})
 	request.session.setdefault('seat_ID', {})
-	context ={'error': False, 'login_user' : request.session['login_user'], "user_info" : request.session['user_info'], 'seat' : request.session['seat_ID']}
+	context = {'error': False, "login_user" : request.session['login_user'], "user_info" : request.session['user_info'], 'seat' : request.session['seat_ID'],  'user_name' : request.session['user_name']}
 	if request.session['login_user'] != '???':
 		return render(request, 'main_menu.html', context)
 	else:
@@ -21,16 +22,18 @@ def home(request):
 def logout(request):
 	request.session['login_user'] = '???'
 	request.session['user_info'] = ''
+	request.session['user_name'] = ''
 	context = {'error': False}
 	return HttpResponseRedirect('/login')
 
 
 def login(request):
 	request.session.setdefault('login_user', '???')
+	request.session.setdefault('user_name', 'none')
 	request.session.setdefault('user_info', {})
 	request.session.setdefault('seat', {})
 	request.session.setdefault('seat_ID', {})
-	context = {'error': False, "login_user" : request.session['login_user'], "user_info" : request.session['user_info'], 'seat' : request.session['seat_ID']}
+	context = {'error': False, "login_user" : request.session['login_user'], "user_info" : request.session['user_info'], 'seat' : request.session['seat_ID'],  'user_name' : request.session['user_name']}
 
 	if request.session['login_user'] != '???':
 		return HttpResponseRedirect('/home')
@@ -45,6 +48,7 @@ def login(request):
 	if s.exists() :
 		request.session['login_user'] = ID
 		name = s.values_list('name', flat = True)[0]
+		request.session['user_name'] = name
 		age = str(s.values_list('age', flat = True)[0])
 		sex = s.values_list('sex', flat = True)[0]
 		major = s.values_list('major', flat = True)[0]
@@ -80,12 +84,7 @@ def login(request):
 		request.session['user_info'] = user_info
 		request.session['seat'] = seat
 		request.session['seat_ID'] = seat_ID
-		for item in user_info:
-			user_info[item] = tools.html_printable(user_info[item])
 
-		context['user_info'] = request.session['user_info']
-		context["login_user"] = request.session['login_user']
-		context['seat'] = request.session['seat_ID']
 		return HttpResponseRedirect('/home')
 	else :
 		context['error'] = True
@@ -97,7 +96,7 @@ def choose_seat(request):
 	request.session.setdefault('user_info', {})
 	request.session.setdefault('seat', {})
 	request.session.setdefault('seat_ID', {})
-	context = {'error': False, "login_user" : request.session['login_user'], "user_info" : request.session['user_info'], 'seat' : request.session['seat_ID']}
+	context = {'error': False, "login_user" : request.session['login_user'], "user_info" : request.session['user_info'], 'seat' : request.session['seat_ID'],  'user_name' : request.session['user_name']}
 
 	if request.session['login_user'] == '???':
 		return HttpResponseRedirect('/login')

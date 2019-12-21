@@ -15,8 +15,6 @@ urlpatterns = [
     url(r'^search$', views.search),
     url(r'^generate_seat$', views.generate_seat),
     url(r'^final_map$', views.final_map),
-
-	
 	
 	url(r'^add_friends', views.add_friends, name = 'add_friends'),
 	url(r'^look_friends', views.look_friends, name = 'look_friends'),
