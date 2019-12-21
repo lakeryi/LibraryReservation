@@ -225,18 +225,18 @@
                         <div class="col-md-4">
 							<div class="card">
 								<div class="card-body">
-                                     {% if not stu_list %}
+                                     {% if not attention_list %}
                                          <div class="card-title fw-mediumbold">You haven't added a friend to follow :(</div>
                                          <div class="card-title fw-mediumbold">Add a friend right now!</div>
                                      {% else %}
                                          <div class="card-title fw-mediumbold">People I'm Following</div>
 
-                                         <form action="/add_friends" method="POST">
+                                         <form action="/look_friends" method="POST">
                                             {% csrf_token %}
 
 
                                             <div class="card-list">
-                                                {% for stu in stu_list %}
+                                                {% for stu in attention_list %}
 
 								        		<div class="item-list">
                                                     <div class="avatar avatar-away">
@@ -247,8 +247,7 @@
 												        <div class="status">{{ stu.student_id }} - {{ stu.major }}</div>
 											        </div>
 
-                                                    <input type="radio" name="add_a_friend"
-                                                                  value={{ stu.student_id }}/>
+                                                    <input type="radio" name="delete_a_friend" value={{ stu.student_id }} >
 
                                                 </div>
                                                 {% endfor %}
@@ -270,17 +269,13 @@
 				    	<div class="col-md-4">
 							<div class="card">
 								<div class="card-body">
-                                     {% if not stu_list %}
+                                     {% if not fan_list %}
                                          <div class="card-title fw-mediumbold">No one is following you :(</div>
                                      {% else %}
                                          <div class="card-title fw-mediumbold">People Following me </div>
 
-                                         <form action="/add_friends" method="POST">
-                                            {% csrf_token %}
-
-
                                             <div class="card-list">
-                                                {% for stu in stu_list %}
+                                                {% for stu in fan_list %}
 
 								        		<div class="item-list">
                                                     <div class="avatar avatar-away">
@@ -291,22 +286,13 @@
 												        <div class="status">{{ stu.student_id }} - {{ stu.major }}</div>
 											        </div>
 
-                                                    <input type="radio" name="add_a_friend"
-                                                                  value={{ stu.student_id }}/>
+                                                   
 
                                                 </div>
-                                                {% endfor %}
-                                                <div style="text-align: right;">
-                                                    <button type="submit" class="btn btn-icon btn-primary btn-round btn-xs mt-5 pl-5 pr-4">
-												        <i class="fa fa-minus"></i>
-                                                    </button>
-                                                </div>
-
+                                                {% endfor %}        
                                             </div>
-                                         </form>
 
                                      {% endif %}
-
 
 								</div>
 							</div>
