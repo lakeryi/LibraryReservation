@@ -301,28 +301,27 @@
                                 <script language="javascript">
 
                                 var arr=[[1,0,0,0,0,0,0],[1,1,0,0,0,0,0],[1,1,1,0,0,0,0],[1,1,1,1,0,0,0],[1,1,1,1,1,0,0],[1,1,1,1,1,1,0],[1,1,1,1,1,1,1]];
-
+								var pos = 0;
                                 for (var i=0;i<arr.length;i++) {
                                     document.write("<ul class=\"cbp-ig-grid\">")
 
                                     for (var j = 0; j < arr[i].length; j++) {
                                         if (arr[i][j] == 1) {
-
-
                                             document.write("<li><form action=\"/choose_seat\" method=\"POST\" name=\"sentMessage\" id=\"contactForm\">")
                                             document.write("<div class=\"w3_grid_effect\">")
                                             document.write("<span class=\"cbp-ig-icon w3_cube\" onclick=\"javascript:print_user_info(1)\"></span>")
-                                            document.write("<button name = \"id\"  value = 1 class=\"cbp-ig-category\">Free</button>")
+                                            document.write("<button name = \"pos\"  value = " + str(pos) + " class=\"cbp-ig-category\">Free</button>")
                                             document.write("</div>")
                                             document.write(" </form></li>")
                                         }
                                         else {
-                                            document.write("<li><form action=\"/choose\" method=\"POST\" name=\"sentMessage\" id=\"contactForm\">" +
+                                            document.write("<li><form action=\"/choose_seat\" method=\"POST\" name=\"sentMessage\" id=\"contactForm\">" +
                                                 "                        <div class=\"w3_grid_effect_space\">" +
                                                 "                        <span class=\"cbp-ig-icon_ w3_road\" onclick=\"javascript:print_user_info(1)\"></span>" +
                                                 "                        </div>" +
                                                 "                </form></li>");
                                         }
+										pos++;
                                     }
                                     document.write("</ul>")
                                 }

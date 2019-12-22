@@ -214,21 +214,16 @@ def look_friends(request):
 
 def input(request):
 	context={}
-	
-	
 	return render(request, 'book_seat_int.html',context)
-	
-	
 
-
-
-#    request.encoding = 'utf-8'
 
 def clear_arr():
-	arr = [[0 for i in range (0,10)] for j in range(0,30)]
+	arr = [[int(0) for j in range (0,10)] for i in range(0,30)]
 	return arr
 			
 def generate_seat(request):
+#	request.session['arr'] = ''
+#	return HttpResponse("Hello")
 	request.session.setdefault('login_user', '???')
 	user_id = request.session['login_user']
 	user = models.Students.objects.get(pk = user_id)
@@ -243,7 +238,7 @@ def generate_seat(request):
 		room_id = request.POST.get('room_id')
 		room_row = request.POST.get('room_row')
 		room_col = request.POST.get('room_col')
-		if not (room_id or room_row or room_col):
+		if not (room_id and room_row and room_col):
 			context['error'] = 'Input is necessary !'
 			return render(request, 'create_classroom.html', context)
 		if models.Rooms.objects.filter(pk = room_id):
@@ -257,6 +252,7 @@ def generate_seat(request):
 		room_row = int(room_row)
 		room_col = int(room_col)
 		arr = clear_arr()
+		request.session['room_id'] = room_id
 		request.session['room_row'] = room_row
 		request.session['room_col'] = room_col
 		request.session['arr'] = arr
@@ -265,23 +261,25 @@ def generate_seat(request):
 		room_col = request.session['room_col']
 		arr = request.session['arr']
 	
-	context['room_row'] = room_row
-	context['room_col'] = room_col
-	
+	context['room_row'] = json.dumps(room_row)
+	context['room_col'] = json.dumps(room_col)
+	print("\n QAQ \n")
 	if not request.POST.get('submit_room'):
 		if not request.POST.get('seat_button'):
 			context['arr'] = arr
+			print("\n 222 \n")
 			return render(request, 'create_classroom.html', context)
-		
+		print("\n 111 \n")
 		val = int(request.POST.get('seat_button'))
-		x = val / 10
+		x = val // 10
 		y = val % 10
 		arr[x][y] ^= 1
 		request.session['arr'] = arr
-		context['arr'] = arr
+		context['arr'] = json.dumps(arr)
 		return render(request, 'create_classroom.html', context)
 	
-	room = models.Rooms.objects.create(room_id = room_id, room_row = room_row, room_col = room_col, )	
+	print("\n ovo \n")
+	room = models.Rooms.objects.create(room_id = request.session['room_id'], room_row = request.session['room_row'], room_col = request.session['room_col'], )	
 	for i in range(0, room_row):
 		for j in range(0, room_col):
 			ch = models.Chairs.objects.create(row = i, col = j, is_real = arr[i][j], room = room)
@@ -291,5 +289,4 @@ def generate_seat(request):
 	room.save()
 	
 	request.session['arr'] = ''
-	return render(request, 'create_classroom.html', context)
-
+	return HttpResponseRedirect('/generate_seat')

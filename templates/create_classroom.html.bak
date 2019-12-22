@@ -247,41 +247,48 @@
                                      {% else %}
                                          <div class="card-title fw-mediumbold">Generate Map</div>
 
-                                         
+                                         <form action="/generate_seat" method="POST">
+                                            {% csrf_token %}
 
                                             <div align="center">
-                                                <script language="JavaScript" type="text/javascript">
+                                                <script language="JavaScript">
+
                                                     document.write("<form style=\"float:left;\" action=\"/generate_seat\" method=\"get\"> \
                                                                                 </form>") {# 跳回本界面 #}
-																					
-													var arr = JSON.parse('{{ arr|safe }}');
-                                                    for (var i = 0 ; i < JSON.parse('{{ room_row }}'); i++){
+													var arr = new Array();
+                                                    for (var i = 0 ; i < room_col; i++)
+                                                    for (var i=0;i<arr.length;i++) {
                                                         document.write("<br>")
 
-                                                        for (var j = 0; j < JSON.parse('{{ room_col }}'); j++) {
-															var value = (i*10+j).toString()
+                                                        for (var j = 0; j < arr[i].length-1; j++) {
+                                                            {#document.write("<br>")#}
                                                             if (arr[i][j] == 1) {
-                                                                document.write("<form style=\"display:inline;\" action=\"/generate_seat\" method=\"POST\"> " 
-                                                                               + " <button type=\"submit\" class=\"btn btn-sm mt-3\" name=\"seat_button\" value=" + value +" >C</button></form>") {# 跳回本界面 #}
+                                                                document.write("<form style=\"display:inline;\" action=\"/generate_seat\" method=\"get\">\ {#POST?#}
+                                                                                <button type=\"submit\" class=\"btn btn-sm mt-3\" name="seat_button" value= "">C</button></form>") {# 跳回本界面 #}
                                                             }
                                                             else{
-                                                                document.write("<form style=\"display:inline;\" action=\"/generate_seat\" method=\"POST\"> "
-                                                                               + " <button type=\"submit\" class=\"btn btn-sm mt-3\" name=\"seat_button\" value=" + value + " >S</button></form>")
+                                                                document.write("<form style=\"display:inline;\" action=\"/generate_seat\" method=\"get\">\
+                                                                                <button type=\"submit\" class=\"btn btn-sm mt-3\" name="seat_button" value= "">S</button></form>")
                                                             }
-                                                        }
+
+                                                            }
                                                         document.write("</br>")
+
+
                                                     }
-													</script>
+
+                                                </script>
                                             </div>
-											
-											<form action="/generate_seat" method="POST">
-												<div style="text-align: right;">
-													<button type="submit" class="btn btn-xs mt-5 pl-5 pr-4" name = "submit_room" value="a">
-														Create the Classroom!
-													</button>
-												</div>
-											</form>
-										
+
+
+                                             <div style="text-align: right;">
+                                                 <button type="submit" class="btn btn-xs mt-5 pl-5 pr-4">
+                                                     Create the Classroom!
+                                                 </button>
+                                             </div>
+
+                                         </form>
+
                                      {% endif %}
 
 
