@@ -12,9 +12,7 @@ from django.contrib import staticfiles
 
 urlpatterns = [
 	url(r'^input$', views.input),
-    url(r'^search$', views.search),
     url(r'^generate_seat$', views.generate_seat),
-    url(r'^final_map$', views.final_map),
 	
 	url(r'^change_password', views.change_password),
 

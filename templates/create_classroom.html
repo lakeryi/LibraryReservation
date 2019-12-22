@@ -203,25 +203,25 @@
 								</div>
 								<div class="card-body pb-0">
 
-                                    <form action="/add_friends" method="POST">
+                                    <form action="/generate_seat" method="POST">
                                         {% csrf_token %}
 
                                         <div class="input-group">
 
-                                            <input type="text" placeholder="input Classroom ID..." class="form-control" name="text" value="">
+                                            <input type="text" placeholder="input Classroom ID..." class="form-control" name="room_id" value="">
 
 							            </div>
 
 
                                         <div class="input-group">
 
-                                            <input type="text" placeholder="input row..." class="form-control" name="text" value="">
+                                            <input type="text" placeholder="input row..." class="form-control" name="room_row" value="">
 
 							            </div>
 
                                         <div class="input-group">
 
-                                            <input type="text" placeholder="input column..." class="form-control" name="text" value="">
+                                            <input type="text" placeholder="input column..." class="form-control" name="room_col" value="">
                                             <div class="input-group-sm">
 
 								            </div>
@@ -242,12 +242,12 @@
                         <div class="col-md-8">
 							<div class="card">
 								<div class="card-body">
-                                     {% if not stu_list %}  {# 需要改 #}
-                                            <div class="card-title fw-mediumbold">Impossible Row or Column</div>
+                                     {% if  error  %}  
+                                            <div class="card-title fw-mediumbold"> {{error}} </div>
                                      {% else %}
                                          <div class="card-title fw-mediumbold">Generate Map</div>
 
-                                         <form action="/add_friends" method="POST">
+                                         <form action="/generate_seat" method="POST">
                                             {% csrf_token %}
 
                                             <div align="center">
@@ -255,20 +255,20 @@
 
                                                     document.write("<form style=\"float:left;\" action=\"/generate_seat\" method=\"get\"> \
                                                                                 </form>") {# 跳回本界面 #}
-
-                                                    var arr=[[0,0,0,0,0,0],[0,1,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]]
+													var arr = new Array();
+                                                    for (var i = 0 ; i < room_col; i++)
                                                     for (var i=0;i<arr.length;i++) {
                                                         document.write("<br>")
 
                                                         for (var j = 0; j < arr[i].length-1; j++) {
                                                             {#document.write("<br>")#}
                                                             if (arr[i][j] == 1) {
-                                                                document.write("<form style=\"display:inline;\" action=\"/generate_seat\" method=\"get\">\
-                                                                                <button type=\"submit\" class=\"btn btn-sm mt-3\">C</button></form>") {# 跳回本界面 #}
+                                                                document.write("<form style=\"display:inline;\" action=\"/generate_seat\" method=\"get\">\ {#POST?#}
+                                                                                <button type=\"submit\" class=\"btn btn-sm mt-3\" name="seat_button" value= "">C</button></form>") {# 跳回本界面 #}
                                                             }
                                                             else{
                                                                 document.write("<form style=\"display:inline;\" action=\"/generate_seat\" method=\"get\">\
-                                                                                <button type=\"submit\" class=\"btn btn-sm mt-3\">S</button></form>")
+                                                                                <button type=\"submit\" class=\"btn btn-sm mt-3\" name="seat_button" value= "">S</button></form>")
                                                             }
 
                                                             }
