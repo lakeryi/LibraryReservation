@@ -1,5 +1,7 @@
 from django.db import models
-
+from django.utils import timezone
+import time
+import datetime
 # Create your models here.
 
 class Chairs(models.Model):
@@ -21,13 +23,12 @@ class Students(models.Model):
 
 		
 class Rent(models.Model):
-	begin_time = models.DateTimeField()
-	chair = models.OneToOneField('Chairs', models.DO_NOTHING, db_column='chair', primary_key=True)
-	student = models.OneToOneField('Students', models.DO_NOTHING, db_column='student', null = True)
-	arrive_time = models.DateTimeField()
-	end_time = models.DateTimeField()
-	is_active = models.BooleanField(default = True)
-
+	rent_id = models.BigAutoField(primary_key=True)
+	begin_time = models.DateTimeField(default = timezone.now())
+	chair = models.ForeignKey('Chairs', models.DO_NOTHING, db_column='chair', null=True)
+	student = models.ForeignKey('Students', models.DO_NOTHING, db_column='student', null = True)
+	arrive_time = models.DateTimeField( default = timezone.now())
+	end_time = models.DateTimeField(default = timezone.now() + datetime.timedelta(days=1) )
 
 
 class Friends(models.Model):
@@ -39,5 +40,6 @@ class Rooms(models.Model):
 	room_row = models.IntegerField()
 	room_col = models.IntegerField()
 	availble_number = models.IntegerField(default = 0)
+	total_seat = models.IntegerField(default = 0)
 
 	

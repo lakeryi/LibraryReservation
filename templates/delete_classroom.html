@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>Home</title>
+	<title>Delete Room</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<link rel="icon" href="/assets/img/icon.ico" type="image/x-icon"/>
 
@@ -70,36 +70,7 @@
 								<i class="fa fa-search"></i>
 							</a>
 						</li>
-						<li class="nav-item dropdown hidden-caret">
-							<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false">
-								<div class="avatar-sm">
-									<img src="/assets/img/profile.jpg" alt="..." class="avatar-img rounded-circle">
-								</div>
-							</a>
-							<ul class="dropdown-menu dropdown-user animated fadeIn">
-								<div class="dropdown-user-scroll scrollbar-outer">
-									<li>
-										<div class="user-box">
-											<div class="avatar-lg"><img src="/assets/img/profile.jpg" alt="image profile" class="avatar-img rounded"></div>
-											<div class="u-text">
-												<h4>Hizrian</h4>
-												<p class="text-muted">hello@example.com</p><a href="profile.html" class="btn btn-xs btn-secondary btn-sm">View Profile</a>
-											</div>
-										</div>
-									</li>
-									<li>
-										<div class="dropdown-divider"></div>
-										<a class="dropdown-item" href="#">My Profile</a>
-										<a class="dropdown-item" href="#">My Attention</a>
-										<a class="dropdown-item" href="#">My Reservation</a>
-										<div class="dropdown-divider"></div>
-										<a class="dropdown-item" href="#">Account Setting</a>
-										<div class="dropdown-divider"></div>
-										<a class="dropdown-item" href="#">Logout</a>
-									</li>
-								</div>
-							</ul>
-						</li>
+						
 					</ul>
 				</div>
 			</nav>
@@ -112,12 +83,12 @@
 				<div class="sidebar-content">
 					<div class="user pt-5" >
 						<div class="avatar-sm float-left mr-2 ">
-							<img src="/assets/img/profile.jpg" alt="..." class="avatar-img rounded-circle">
+							<span class="avatar-title rounded-circle border border-white bg-danger">{{ user.name.0 }}</span>
 						</div>
 						<div class="info">
 							<a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
 								<span>
-									Cheryl
+									{{ user.name }}
 									<span class="user-level">Admin</span>
 									<span class="caret"></span>
 								</span>
@@ -127,18 +98,13 @@
 							<div class="collapse in" id="collapseExample">
 								<ul class="nav">
 									<li>
-										<a href="#profile">
-											<span class="link-collapse">My Profile</span>
+										<a href="/change_password">
+											<span class="link-collapse">Change Password</span>
 										</a>
 									</li>
 									<li>
-										<a href="#edit">
-											<span class="link-collapse">Edit Profile</span>
-										</a>
-									</li>
-									<li>
-										<a href="#settings">
-											<span class="link-collapse">Settings</span>
+										<a href="/logout">
+											<span class="link-collapse">Log Out</span>
 										</a>
 									</li>
 								</ul>
@@ -161,18 +127,13 @@
 							<div class="collapse" id="base">
 								<ul class="nav nav-collapse">
 									<li>
-										<a href="components/avatars.html">
+										<a href="/generate_seat">
 											<span class="sub-item">Create a Classroom</span>
 										</a>
 									</li>
 									<li>
-										<a href="components/buttons.html">
+										<a href="/delete_room">
 											<span class="sub-item">Delete a Classroom</span>
-										</a>
-									</li>
-                                    <li>
-										<a href="components/buttons.html">
-											<span class="sub-item">Look a Classroom</span>
 										</a>
 									</li>
 								</ul>
@@ -189,8 +150,7 @@
 			<div class="content">
 				<div class="page-inner">
 					<div class="mt-2 mb-4">
-						<h2 class="text-white pb-2">Welcome back, Hizrian!</h2>
-						<h5 class="text-white op-7 mb-4">Create a new classroom!</h5>
+						<h5 class="text-white op-7 mb-4">Delete classrooms!</h5>
 					</div>
 
 
@@ -199,15 +159,15 @@
 						<div class="col-md-12">
 							<div class="card">
 								<div class="card-header">
-									<div class="card-title">Please input the number of row and column!</div>
+									<div class="card-title">Choose to delete rooms!</div>
 								</div>
 								<div class="card-body pb-0">
                                     {% if not cls_list %}
-                                            <div class="card-title fw-mediumbold">No Classrooms</div>
+                                            <div class="card-title fw-mediumbold">No Rooms</div>
                                      {% else %}
                                          <div class="card-title fw-mediumbold">Results</div>
 
-                                         <form action="/add_friends" method="POST">
+                                         <form action="/delete_room" method="POST">
                                             {% csrf_token %}
 
 
@@ -219,12 +179,12 @@
                                             	        <span class="avatar-title rounded-circle border border-white bg-danger">{{ cls.id }}</span>
                                                     </div>
 											        <div class="info-user ml-3">
-												        <div class="username">Classroom ID: {{ cls.id }}</div>
-												        <div class="status">Number of Seats: {{ cls.num }}</div>
+												        <div class="username">Room ID: {{ cls.room_id }}</div>
+												        <div class="status">Number of Seats: {{ cls.total_seat }}</div>
 											        </div>
 
-                                                    <input type="radio" name="delete-a-cls"
-                                                                  value={{ cls.id }}/>
+                                                    <input type="radio" name="delete"
+                                                                  value={{ cls.room_id }} >
 
                                                 </div>
                                                 {% endfor %}
@@ -360,35 +320,6 @@
 	<script src="/assets/js/atlantis.min.js"></script>
 
 	<!-- Atlantis DEMO methods, don't include it in your project! -->
-	<script src="/assets/js/setting-demo.js"></script>
-	<script src="/assets/js/demo.js"></script>
-	<script>
-		$('#lineChart').sparkline([102,109,120,99,110,105,115], {
-			type: 'line',
-			height: '70',
-			width: '100%',
-			lineWidth: '2',
-			lineColor: 'rgba(255, 255, 255, .5)',
-			fillColor: 'rgba(255, 255, 255, .15)'
-		});
-
-		$('#lineChart2').sparkline([99,125,122,105,110,124,115], {
-			type: 'line',
-			height: '70',
-			width: '100%',
-			lineWidth: '2',
-			lineColor: 'rgba(255, 255, 255, .5)',
-			fillColor: 'rgba(255, 255, 255, .15)'
-		});
-
-		$('#lineChart3').sparkline([105,103,123,100,95,105,115], {
-			type: 'line',
-			height: '70',
-			width: '100%',
-			lineWidth: '2',
-			lineColor: 'rgba(255, 255, 255, .5)',
-			fillColor: 'rgba(255, 255, 255, .15)'
-		});
-	</script>
+	
 </body>
 </html>

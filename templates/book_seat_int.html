@@ -241,7 +241,7 @@
 			<div class="content">
 				<div class="page-inner">
 					<div class="mt-2 mb-4">
-						<h2 class="text-white pb-2">Welcome back, Hizrian!</h2>
+						<h2 class="text-white pb-2">Welcome back, {{ user_name }}!</h2>
 						<h5 class="text-white op-7 mb-4">Book your seat and find your friends!</h5>
 					</div>
 
@@ -252,72 +252,91 @@
 							<div class="card">
 								<div class="card-header">
 									<div class="card-title">Book a Seat</div>
+									<div class="input—group">
+										From {{ begin_time }} to {{ end_time }}
+									</div>
+									<div class="input-group">
+										<form action=/choose_seat method="POST" name="sentMessage" id = "contactForm">
+											Begin：
+											<select name='begin_time'>
+												<option   value=8 > 08:00</option>
+												<option   value=9 > 09:00</option>
+												<option  value=10 > 10:00</option>
+												<option  value=11 > 11:00</option>
+												<option  value=12 > 12:00</option>
+												<option  value=13 > 13:00</option>
+												<option  value=14 > 14:00</option>
+												<option  value=15 > 15:00</option>
+												<option  value=16 > 16:00</option>
+												<option  value=17 > 17:00</option>
+												<option  value=18 > 18:00</option>
+												<option  value=19 > 19:00</option>
+											</select>
+											End：
+											<select name="end_time">
+												<option  value=10 > 10:00</option>
+												<option  value=11 > 11:00</option>
+												<option  value=12 > 12:00</option>
+												<option  value=13 > 13:00</option>
+												<option  value=14 > 14:00</option>
+												<option  value=15 > 15:00</option>
+												<option  value=16 > 16:00</option>
+												<option  value=17 > 17:00</option>
+												<option  value=18 > 18:00</option>
+												<option  value=19 > 19:00</option>
+												<option  value=20 > 20:00</option>
+												<option  value=21 > 21:00</option>
+												<option  value=22 > 22:00</option>
+											</select>
+											Date：
+											<select name="day">
+												<option value=0>Today</option>
+												<option value=1>Tomorrow</option>
+											</select>
+											---->
+											<button name="change_date"  value=True class="cbp-ig-category">Set</button>
+										</form>
+									</div>
 								</div>
 								<div class="card-body pb-0">
-                                <div class="input-group">
-
-                                            <select name="selection">
-
-                                        <option value="stu_id"> 9</option>
-
-                                        <option value="stu_name">10</option>
-                                                <option value="stu_name">11</option>
-                                                <option value="stu_name">12</option>
-                                                <option value="stu_name">13</option>
-                                                <option value="stu_name">14</option>
-                                                <option value="stu_name">15</option>
-                                                <option value="stu_name">16</option>
-                                                <option value="stu_name">17</option>
-                                                <option value="stu_name">18</option>
-                                                <option value="stu_name">19</option>
-                                                <option value="stu_name">20</option>
-                                                <option value="stu_name">21</option>
-                                        </select>
-                                    <select name="selection">
-
-                                        <option value="stu_id"> 9</option>
-
-                                        <option value="stu_name">10</option>
-                                                <option value="stu_name">11</option>
-                                                <option value="stu_name">12</option>
-                                                <option value="stu_name">13</option>
-                                                <option value="stu_name">14</option>
-                                                <option value="stu_name">15</option>
-                                                <option value="stu_name">16</option>
-                                                <option value="stu_name">17</option>
-                                                <option value="stu_name">18</option>
-                                                <option value="stu_name">19</option>
-                                                <option value="stu_name">20</option>
-                                                <option value="stu_name">21</option>
-                                        </select>
-                                    <select name="selection">
-
-                                        <option value="stu_id">Today</option>
-
-                                        <option value="stu_name"> Tomorrow</option>
-                                        </select>
-
-							            </div>
+								<script type="text/javascript">
+									function print_user_info(pos) {
+										if (pos < 0) return;
+										var data = JSON.parse('{{ seat_info|safe }}')[pos];
+										var info = data['info'];
+										info = info.replace(/WangSaORZORZWangSa/g, "\n");
+										alert(info);
+									}
+								</script>
                                 <script language="javascript">
 
-                                var arr=[[1,0,0,0,0,0,0],[1,1,0,0,0,0,0],[1,1,1,0,0,0,0],[1,1,1,1,0,0,0],[1,1,1,1,1,0,0],[1,1,1,1,1,1,0],[1,1,1,1,1,1,1]];
-								var pos = 0;
-                                for (var i=0;i<arr.length;i++) {
-                                    document.write("<ul class=\"cbp-ig-grid\">")
+                                var arr = JSON.parse('{{ seat_arr|safe }}');								
 
+								var pos = 0;
+
+                                for (var i = 0; i < arr.length; i++) {
+                                    document.write("<ul class=\"cbp-ig-grid\">")
                                     for (var j = 0; j < arr[i].length; j++) {
-                                        if (arr[i][j] == 1) {
+                                        if (arr[i][j] == 2) {
                                             document.write("<li><form action=\"/choose_seat\" method=\"POST\" name=\"sentMessage\" id=\"contactForm\">")
                                             document.write("<div class=\"w3_grid_effect\">")
-                                            document.write("<span class=\"cbp-ig-icon w3_cube\" onclick=\"javascript:print_user_info(1)\"></span>")
-                                            document.write("<button name = \"pos\"  value = " + str(pos) + " class=\"cbp-ig-category\">Free</button>")
+                                            document.write("<span class=\"cbp-ig-icon w3_cube\" onclick=\"javascript:print_user_info(" + pos.toString() + ")\"></span>")
                                             document.write("</div>")
+                                            document.write("<button name = \"pos\"  value = " + pos.toString() + " class=\"cbp-ig-category\">Free</button>")
                                             document.write(" </form></li>")
                                         }
+										else if (arr[i][j] == 1) {
+                                            document.write("<li><form action=\"/choose_seat\" method=\"POST\" name=\"sentMessage\" id=\"contactForm\">")
+                                            document.write("<div class=\"w3_grid_effect\">")
+                                            document.write("<span class=\"cbp-ig-icon_ w3_cube\" onclick=\"javascript:print_user_info(" + pos.toString() + ")\"></span>")
+                                            document.write("</div>")
+                                            document.write("<button name = \"pos\"  value = " + pos.toString() + " class=\"cbp-ig-category\">Chosen</button>")
+                                            document.write(" </form></li>")
+										}
                                         else {
                                             document.write("<li><form action=\"/choose_seat\" method=\"POST\" name=\"sentMessage\" id=\"contactForm\">" +
                                                 "                        <div class=\"w3_grid_effect_space\">" +
-                                                "                        <span class=\"cbp-ig-icon_ w3_road\" onclick=\"javascript:print_user_info(1)\"></span>" +
+                                                "                        <span class=\"cbp-ig-icon w3_road\"></span>" +
                                                 "                        </div>" +
                                                 "                </form></li>");
                                         }
@@ -332,7 +351,7 @@
 {#                                    {% autoescape off %}#}
 {#                                    {{ part }}#}
 {#                                    {% endautoescape %}#}
-								</div>
+								</div></div>
 							</div>
 						</div>
 
@@ -415,7 +434,6 @@
 		<!-- End Custom template -->
 	</div>
 	<!--   Core JS Files   -->
-	<script src="/assets/js/core/jquery.3.2.1.min.js"></script>
 	<script src="/assets/js/core/popper.min.js"></script>
 	<script src="/assets/js/core/bootstrap.min.js"></script>
 

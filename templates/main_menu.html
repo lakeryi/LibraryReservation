@@ -53,16 +53,7 @@
 				
 				<div class="container-fluid">
 					<div class="collapse" id="search-nav">
-						<form class="navbar-left navbar-form nav-search mr-md-3">
-							<div class="input-group">
-								<div class="input-group-prepend">
-									<button type="submit" class="btn btn-search pr-1">
-										<i class="fa fa-search search-icon"></i>
-									</button>
-								</div>
-								<input type="text" placeholder="Search users..." class="form-control">
-							</div>
-						</form>
+						
 					</div>
 					<ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
 						<li class="nav-item toggle-nav-search hidden-caret">
@@ -73,30 +64,12 @@
 						<li class="nav-item dropdown hidden-caret">
 							<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false">
 								<div class="avatar-sm">
-									<img src="/assets/img/profile.jpg" alt="..." class="avatar-img rounded-circle">
+									
 								</div>
 							</a>
 							<ul class="dropdown-menu dropdown-user animated fadeIn">
 								<div class="dropdown-user-scroll scrollbar-outer">
-									<li>
-										<div class="user-box">
-											<div class="avatar-lg"><img src="/assets/img/profile.jpg" alt="image profile" class="avatar-img rounded"></div>
-											<div class="u-text">
-												<h4>{{ user_name }}</h4>
-												<p class="text-muted">{{ login_user }}@fudan.edu.cn</p><a href="profile.html" class="btn btn-xs btn-secondary btn-sm">View Profile</a>
-											</div>
-										</div>
-									</li>
-									<li>
-										<div class="dropdown-divider"></div>
-										<a class="dropdown-item" href="#">My Profile</a>
-										<a class="dropdown-item" href="#">My Attention</a>
-										<a class="dropdown-item" href="#">My Reservation</a>
-										<div class="dropdown-divider"></div>
-										<a class="dropdown-item" href="#">Account Setting</a>
-										<div class="dropdown-divider"></div>
-										<a class="dropdown-item" href="/logout">Logout</a>
-									</li>
+									
 								</div>
 							</ul>
 						</li>
@@ -112,12 +85,12 @@
 				<div class="sidebar-content">
 					<div class="user pt-5" >
 						<div class="avatar-sm float-left mr-2 ">
-							<img src="/assets/img/profile.jpg" alt="..." class="avatar-img rounded-circle">
+							<span class="avatar-title rounded-circle border border-white bg-danger">{{ user.name.0 }}</span>
 						</div>
 						<div class="info">
 							<a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
 								<span>
-									{{ user_name }}
+									{{ user.name }}
 									<span class="user-level">Student</span>
 									<span class="caret"></span>
 								</span>
@@ -127,8 +100,18 @@
 							<div class="collapse in" id="collapseExample">
 								<ul class="nav">
 									<li>
-										<a href="\change_password">
-											<span class="link-collapse">修改密码</span>
+										<a href="/home">
+											<span class="link-collapse">Home</span>
+										</a>
+									</li>
+									<li>
+										<a href="/change_password">
+											<span class="link-collapse">Change Password</span>
+										</a>
+									</li>
+									<li>
+										<a href="/logout">
+											<span class="link-collapse">Log Out</span>
 										</a>
 									</li>
 								</ul>
@@ -140,24 +123,56 @@
 							<span class="sidebar-mini-icon">
 								<i class="fa fa-ellipsis-h"></i>
 							</span>
-							<h4 class="text-section">菜单</h4>
+							<h4 class="text-section">Components</h4>
+						</li>
+						<li class="nav-item">
+							<a data-toggle="collapse" href="#base">
+								<i class="fas fa-layer-group"></i>
+								<p>Seat Reservation</p>
+								<span class="caret"></span>
+							</a>
+							<div class="collapse" id="base">
+								<ul class="nav nav-collapse">
+									<li>
+										<a href="components/avatars.html">
+											<span class="sub-item">Book a Seat</span>
+										</a>
+									</li>
+									<li>
+										<a href="components/buttons.html">
+											<span class="sub-item">Cancel a Seat</span>
+										</a>
+									</li>
+									<li>
+										<a href="components/gridsystem.html">
+											<span class="sub-item">Reservation History</span>
+										</a>
+									</li>
+									<li>
+										<a href="components/panels.html">
+											<span class="sub-item">Rules</span>
+										</a>
+									</li>
+								</ul>
+							</div>
 						</li>
 						<li class="nav-item">
 							<a data-toggle="collapse" href="#sidebarLayouts">
 								<i class="fas fa-th-list"></i>
-								<p>关注</p>
+								<p>Attention</p>
 								<span class="caret"></span>
 							</a>
 							<div class="collapse" id="sidebarLayouts">
 								<ul class="nav nav-collapse">
 									<li>
 										<a href="/look_friends">
-											<span class="sub-item">正在关注的人</span>
+											<span class="sub-item">My Attention&Fan</span>
 										</a>
 									</li>
+	
 									<li>
 										<a href="/add_friends">
-											<span class="sub-item">添加关注对象</span>
+											<span class="sub-item">Add an Attention</span>
 										</a>
 									</li>
 								</ul>
@@ -173,190 +188,41 @@
 			<div class="content">
 				<div class="page-inner">
 					<div class="mt-2 mb-4">
-						<h2 class="text-white pb-2">Welcome back, {{ user_name }}!</h2>
+						<h2 class="text-white pb-2">Welcome back, {{ user.name }} !</h2>
 						<h5 class="text-white op-7 mb-4">Book your seat and find your friends!</h5>
 					</div>
 
-
-
-					<div class="row">
-						<div class="col-md-4">
-							<div class="card">
-								<div class="card-header">
-									<div class="card-title">Current Classrooms</div>
-								</div>
-								<div class="card-body pb-0">
-									<div class="d-flex">
-										<div class="avatar">
-											<img src="/assets/img/logoproduct.svg" alt="..." class="avatar-img rounded-circle">
-										</div>
-										<div class="flex-1 pt-1 ml-2">
-											<h6 class="fw-bold mb-1">Room ID: 2301</h6>
-											<small class="text-muted">Total Seats: 200</small>
-										</div>
-										<div class="d-flex ml-auto align-items-center">
-											<h3 class="text-info fw-bold">Free</h3>
-										</div>
-									</div>
-									<div class="separator-dashed"></div>
-									<div class="d-flex">
-										<div class="avatar">
-											<img src="/assets/img/logoproduct.svg" alt="..." class="avatar-img rounded-circle">
-										</div>
-										<div class="flex-1 pt-1 ml-2">
-											<h6 class="fw-bold mb-1">Room ID: 2201</h6>
-											<small class="text-muted">Total Seats: 150</small>
-										</div>
-										<div class="d-flex ml-auto align-items-center">
-											<h3 class="text-info fw-bold">Free</h3>
-										</div>
-									</div>
-									<div class="separator-dashed"></div>
-									<div class="d-flex">
-										<div class="avatar">
-											<img src="/assets/img/logoproduct3.svg" alt="..." class="avatar-img rounded-circle">
-										</div>
-										<div class="flex-1 pt-1 ml-2">
-											<h6 class="fw-bold mb-1">Room ID: 2101</h6>
-											<small class="text-muted">Total Seats: 100</small>
-										</div>
-										<div class="d-flex ml-auto align-items-center">
-											<h3 class="text-info fw-bold">Busy</h3>
-										</div>
-									</div>
-									<div class="separator-dashed"></div>
-									<div class="pull-in">
-										<canvas id="topProductsChart"></canvas>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="card">
-								<div class="card-body">
-									<div class="card-title fw-mediumbold">Suggested People</div>
-									<div class="card-list">
-										<div class="item-list">
-                                            <div class="avatar avatar-away">                                                         
-                                            	<span class="avatar-title rounded-circle border border-white bg-danger">J</span>
-                                            </div>                                                                                   
-											<div class="info-user ml-3">
-												<div class="username">Jimmy Denis</div>
-												<div class="status">Computer Science</div>
-											</div>
-											<button class="btn btn-icon btn-primary btn-round btn-xs">
-												<i class="fa fa-plus"></i>
-											</button>
-										</div>
-										<div class="item-list">
-											<div class="avatar avatar-away">
-												<span class="avatar-title rounded-circle border border-white bg-danger">C</span>
-											</div>
-											<div class="info-user ml-3">
-												<div class="username">Chad</div>
-												<div class="status">Software Engineering</div>
-											</div>
-											<button class="btn btn-icon btn-primary btn-round btn-xs">
-												<i class="fa fa-plus"></i>
-											</button>
-										</div>
-										<div class="item-list">
-											<div class="avatar avatar-away">
-												<span class="avatar-title rounded-circle border border-white bg-danger">T</span>
-											</div>
-											<div class="info-user ml-3">
-												<div class="username">Talha</div>
-												<div class="status">Computer Science</div>
-											</div>
-											<button class="btn btn-icon btn-primary btn-round btn-xs">
-												<i class="fa fa-plus"></i>
-											</button>
-										</div>
-										<div class="item-list">
-											<div class="avatar avatar-away">
-												<span class="avatar-title rounded-circle border border-white bg-danger">J</span>
-											</div>
-											<div class="info-user ml-3">
-												<div class="username">John Doe</div>
-												<div class="status">Computer Science</div>
-											</div>
-											<button class="btn btn-icon btn-primary btn-round btn-xs">
-												<i class="fa fa-plus"></i>
-											</button>
-										</div>
-										<div class="item-list">
-											<div class="avatar avatar-away">
-												<span class="avatar-title rounded-circle border border-white bg-danger">T</span>
-											</div>
-											<div class="info-user ml-3">
-												<div class="username">Talha</div>
-												<div class="status">Computer Science</div>
-											</div>
-											<button class="btn btn-icon btn-primary btn-round btn-xs">
-												<i class="fa fa-plus"></i>
-											</button>
-										</div>
-										<div class="item-list">
-											<div class="avatar avatar-away">
-												<span class="avatar-title rounded-circle border border-white bg-danger">J</span>
-											</div>
-											<div class="info-user ml-3">
-												<div class="username">Jimmy Denis</div>
-												<div class="status">Computer Science</div>
-											</div>
-											<button class="btn btn-icon btn-primary btn-round btn-xs">
-												<i class="fa fa-plus"></i>
-											</button>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="card card-primary bg-primary-gradient">
-								<div class="card-body">
-									<h4 class="mt-3 b-b1 pb-2 mb-4 fw-bold">Active user right now</h4>
-									<h2 class="mb-4 fw-bold">17</h2>
-									<h4 class="mt-3 b-b1 pb-2 mb-4 fw-bold">Room 2301</h4>
-
-                                    <h2 class="mb-4 fw-bold">15</h2>
-									<h4 class="mt-3 b-b1 pb-2 mb-4 fw-bold">Room 2201</h4>
-
-                                    <h2 class="mb-4 fw-bold">12</h2>
-									<h4 class="mt-3 b-b1 pb-2 mb-4 fw-bold">Room 2101</h4>
-
-
-								</div>
-							</div>
-						</div>
-					</div>
+						
 					<div class="row">
 						<div class="col-md-6">
 							<div class="card">
 								<div class="card-header">
 									<div class="card-title">Current Reservation</div>
 								</div>
-								<div class="card-body">
-									<ol class="activity-feed">
-										<li class="feed-item feed-item-secondary">
-											<time class="date" datetime="9-25">Sep 25 10:00 - 12:00</time>
-											<span class="text">Pending <a href="#">Room 2301</a></span>
-										</li>
-										<li class="feed-item feed-item-success">
-											<time class="date" datetime="9-24">Sep 24 10:00 - 12:00</time>
-											<span class="text">Pending<a href="#">Room 2301</a></span>
-										</li>
-										<li class="feed-item feed-item-info">
-											<time class="date" datetime="9-23">Sep 23 10:00 - 12:00</time>
-											<span class="text">Pending<a href="single-group.php">Room 2301</a></span>
-										</li>
-										<li class="feed-item feed-item-warning">
-											<time class="date" datetime="9-21">Sep 21 10:00 - 12:00</time>
-											<span class="text">Pending<a href="#">Room 2301</a></span>
-										</li>
-
-									</ol>
-								</div>
+								{% if not cur_res %}
+									<div class="card-title fw-mediumbold">No Reservation</div>
+								{% else %}
+									<form action="/home" method="POST">
+										<div class="card-body">
+											<ol class="activity-feed">
+											
+												{% for r in cur_res%}
+												<li class="feed-item feed-item-secondary">
+													<time class="date"> Start Time : {{ r.begin_time }} </time>
+													<time class="date"> End Time : {{ r.end_time}} </time>
+													<span class="text"> Pending Room : {{ r.chair.room.room_id }}</span>
+													<input type="radio" name="cancel_reservation" value="a">
+												</li>
+												{% endfor %}
+											</ol>
+										</div>
+										<div style="text-align: right;">
+                                                    <button type="submit" class="btn btn-icon btn-primary btn-round btn-xs mt-5 pl-5 pr-4">
+												        <i class="fa fa-minus"></i>
+                                                    </button>
+                                        </div>
+									</form>
+								{% endif %}
 							</div>
 						</div>
 						<div class="col-md-6">
@@ -547,35 +413,6 @@
 	<script src="/assets/js/atlantis.min.js"></script>
 
 	<!-- Atlantis DEMO methods, don't include it in your project! -->
-	<script src="/assets/js/setting-demo.js"></script>
-	<script src="/assets/js/demo.js"></script>
-	<script>
-		$('#lineChart').sparkline([102,109,120,99,110,105,115], {
-			type: 'line',
-			height: '70',
-			width: '100%',
-			lineWidth: '2',
-			lineColor: 'rgba(255, 255, 255, .5)',
-			fillColor: 'rgba(255, 255, 255, .15)'
-		});
 
-		$('#lineChart2').sparkline([99,125,122,105,110,124,115], {
-			type: 'line',
-			height: '70',
-			width: '100%',
-			lineWidth: '2',
-			lineColor: 'rgba(255, 255, 255, .5)',
-			fillColor: 'rgba(255, 255, 255, .15)'
-		});
-
-		$('#lineChart3').sparkline([105,103,123,100,95,105,115], {
-			type: 'line',
-			height: '70',
-			width: '100%',
-			lineWidth: '2',
-			lineColor: 'rgba(255, 255, 255, .5)',
-			fillColor: 'rgba(255, 255, 255, .15)'
-		});
-	</script>
 </body>
 </html>
