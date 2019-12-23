@@ -13,7 +13,12 @@ import datetime
 import json
 
 def home(request):
-	context = tools.init(request)
+	request.session.setdefault('login_user', '???')
+	request.session.setdefault('user_name', 'none')
+	request.session.setdefault('user_info', {})
+	request.session.setdefault('seat', {})
+	request.session.setdefault('seat_ID', {})
+	context = {'error': False, "login_user" : request.session['login_user'], "user_info" : request.session['user_info'], 'seat' : request.session['seat_ID'],  'user_name' : request.session['user_name']}
 	if request.session['login_user'] != '???':
 		return render(request, 'main_menu.html', context)
 	else:
@@ -22,15 +27,19 @@ def home(request):
 
 def logout(request):
 	request.session['login_user'] = '???'
-	request.session['user_name'] = 'none'
-	request.session['user_info'] = {}
-	request.session['seat_info'] = []
-	request.session['room'] = 'none'
+	request.session['user_info'] = ''
+	request.session['user_name'] = ''
+	context = {'error': False}
 	return HttpResponseRedirect('/login')
 
 
 def login(request):
-	context = tools.init(request)
+	request.session.setdefault('login_user', '???')
+	request.session.setdefault('user_name', 'none')
+	request.session.setdefault('user_info', {})
+	request.session.setdefault('seat', {})
+	request.session.setdefault('seat_ID', {})
+	context = {'error': False, "login_user" : request.session['login_user']}
 
 	if request.session['login_user'] != '???':
 		return HttpResponseRedirect('/home')
@@ -39,23 +48,23 @@ def login(request):
 		
 	ID = request.POST.get('ID','')
 	psw = request.POST.get('psw','')
-	s = tools.ID_to_dist(ID)
+	s = models.Students.objects.all().filter(student_id = ID)
+	user_info = {}
 
-	if s['exists'] and s['psw'] == psw :
-		s.pop('psw')
-		s.pop('exists')
-		request.session['login_user'] = s['ID']
-		request.session['user_name'] = s['name']
-		request.session['user_info'] = s
+	if s.exists() and s.values_list('password', flat = True)[0] == psw :
+		request.session['login_user'] = ID
 		return HttpResponseRedirect('/home')
 	else :
 		context['error'] = True
 		return render(request, 'login.html', context)
 
-
-
 def change_password(request):
-	context = tools.init(request)
+	request.session.setdefault('login_user', '???')
+	request.session.setdefault('user_name', 'none')
+	request.session.setdefault('user_info', {})
+	request.session.setdefault('seat', {})
+	request.session.setdefault('seat_ID', {})
+	context = {'error': False, "login_user" : request.session['login_user'], "user_info" : request.session['user_info'], 'seat' : request.session['seat_ID'],  'user_name' : request.session['user_name']}
 	if request.session['login_user'] == '???' :
 		return HttpResponseRedirect('/login')
 	if request.method != 'POST' :
@@ -70,143 +79,66 @@ def change_password(request):
 
 	s.update(password = new)
 
-	return HttpResponseRedirect('/home')	
-
-
-def choose_room(request):
-	context = tools.init(request)
-
-	if request.session['login_user'] == '???':
-		return HttpResponseRedirect('/login')
-	#if request.method != 'POST':
-	#	return HttpResponseRedirect('/home')
-	#room_id = request.POST.get('room', '')
-	#request.session['room'] = room_id
-	
-	request.session['room'] = 'Z2310'
-
-	begin_time = datetime.datetime.now() 
-	end_time = datetime.datetime.now() + datetime.timedelta(hours = 2)
-	begin_dict = tools.time_to_dict(begin_time)
-	begin_dict['minute'] = 0
-	begin_dict['second'] = 0
-	end_dict = tools.time_to_dict(end_time)
-	end_dict['minute'] = 0
-	end_dict['second'] = 0
-	request.session['begin_time'] = begin_dict
-	request.session['end_time'] = end_dict
-
-	if not tools.build_room(request.session['room'], request):
-		return HttpResponseRedirect('/home')
-
-	return HttpResponseRedirect('/choose_seat')
-
+	return HttpResponseRedirect('/home')		
+		
 
 def choose_seat(request):
-	context = tools.init(request)
-	context['seat_info'] = json.dumps(request.session['seat_info'])
-	context['seat_arr'] = json.dumps(request.session['seat_arr'])
-	begin_time = tools.dict_to_time(request.session['begin_time'])
-	end_time = tools.dict_to_time(request.session['end_time'])
-
-	context['begin_time'] = begin_time.strftime('%Y-%m-%d %T')
-	context['end_time'] = end_time.strftime('%Y-%m-%d %T')
+	request.session.setdefault('login_user', '???')
+	request.session.setdefault('user_info', {})
+	request.session.setdefault('seat', {})
+	request.session.setdefault('seat_ID', {})
+	context = {'error': False, "login_user" : request.session['login_user'], "user_info" : request.session['user_info'], 'seat' : request.session['seat_ID'],  'user_name' : request.session['user_name']}
 
 	if request.session['login_user'] == '???':
 		return HttpResponseRedirect('/login')
 	if request.method != 'POST':
-		return render(request, 'book_seat_int.html', context)
-
-	if request.POST.get('change_date'):
-		begin_hour = int(request.POST.get('begin_time', ''))
-		end_hour = int(request.POST.get('end_time', ''))
-		day = int(request.POST.get('day', ''))
-		if begin_hour + 2 > end_hour:
-			return render(request, 'book_seat_int.html', context)
-
-		now_time = datetime.datetime.now() + datetime.timedelta(days = day)
-		begin_dict = tools.time_to_dict(now_time)
-		begin_dict['hour'] = begin_hour
-		begin_dict['minute'] = 0
-		begin_dict['second'] = 0
-		end_dict = tools.time_to_dict(now_time)
-		end_dict['hour'] = end_hour
-		end_dict['minute'] = 0
-		end_dict['second'] = 0
-		request.session['begin_time'] = begin_dict
-		request.session['end_time'] = end_dict
-
-		tools.build_room(request.session['room'], request)
-		context = tools.init(request)
-		context['seat_info'] = json.dumps(request.session['seat_info'])
-		context['seat_arr'] = json.dumps(request.session['seat_arr'])
-
-		begin_time = tools.dict_to_time(request.session['begin_time'])
-		end_time = tools.dict_to_time(request.session['end_time'])
-
-		context['begin_time'] = begin_time.strftime('%Y-%m-%d %T')
-		context['end_time'] = end_time.strftime('%Y-%m-%d %T')
+		return render(request, 'index.html', context)
 		
-		return render(request, 'book_seat_int.html', context)
-
-
-	room_id = request.session['room']
-	pos = int(request.POST.get('pos', ''))
-
-	total_col = models.Rooms.objects.all().filter(room_id = room_id).values_list('room_col', flat = True)[0]
-	row = pos // total_col
-	col = pos % total_col
-
-	seat_info = request.session['seat_info']
-	seat_arr = request.session['seat_arr']
-
-
-	if not seat_info[pos]['exists']:
-		return render(request, 'book_seat_int.html', context)
-	elif seat_info[pos]['rent']:
-		if seat_info[pos]['user'] != request.session['login_user']:
-			return render(request, 'book_seat_int.html', context)
+	chair_id = int(request.POST.get('id',''))
+	seat_pos = 'seat' + str(chair_id)
+	seat = request.session['seat']
+	seat_ID = request.session['seat_ID']
+	user_info = request.session['user_info']
+	
+	if request.session['seat'][seat_pos]:
+		if seat_ID[seat_pos] != request.session['login_user']:
+			return render(request, 'index.html', context)
 		else:
 			models.Rent.objects.filter(student = request.session['login_user']).delete()
-			seat_info[pos]['rent'] = False
-			seat_info[pos]['user'] = 'none'
-			seat_info[pos]['info'] = '这是一个没人预约的座位'
-			seat_arr[row][col] = 2
-
-			request.session['seat_info'] = seat_info
-			request.session['seat_arr'] = seat_arr
-			context['seat_info'] = json.dumps(request.session['seat_info'])
-			context['seat_arr'] = json.dumps(request.session['seat_arr'])
-			return render(request, 'book_seat_int.html', context)
+			seat[seat_pos] = False
+			seat_ID[seat_pos] = str(2147483647)
+			user_info[seat_pos] = '这是一个没人预约的座位'
+			request.session['seat'] = seat
+			request.session['seat_ID'] = seat_ID
+			request.session['user_info'] = user_info
+			context['user_info'] = request.session['user_info']
+			context['seat'] = request.session['seat_ID']
+			return render(request, 'index.html', context)
 	else:
-		now_time = datetime.datetime.now()
-		s = models.Rent.objects.all().filter(student = request.session['login_user'], end_time__gte = now_time)
+		s = models.Rent.objects.all().filter(student = request.session['login_user'])
 		if s.exists():
-			return render(request, 'book_seat_int.html', context)
-		p = models.Chairs.objects.all().get(chair_id = seat_info[pos]['chair'])
+			return render(request, 'index.html', context)
+		p = models.Chairs.objects.all().get(chair_id = chair_id)
 		q = models.Students.objects.all().get(student_id = request.session['login_user'])
 
-		begin_dict = request.session['begin_time']
-		arrive_dict = begin_dict.copy()
-		arrive_dict['hour'] += 1
-		end_dict = request.session['end_time']
-		begin_time = tools.dict_to_time(begin_dict)
-		arrive_time = tools.dict_to_time(arrive_dict)
-		end_time = tools.dict_to_time(end_dict)
+		begin_time = timezone.now() + datetime.timedelta(hours = 8)
+		arrive_time = begin_time + datetime.timedelta(hours = 1)
+		end_time = arrive_time + datetime.timedelta(hours = 8)
 
-		models.Rent.objects.create(student = q, chair = p, begin_time = begin_time, arrive_time = arrive_time, end_time = end_time, is_active = 1)
-		seat_info[pos]['rent'] = True
-		seat_info[pos]['user'] = request.session['login_user']
-		info = tools.ID_to_dist(request.session['login_user'])
-		seat_info[pos]['info'] = '姓名：' + info['name'] + 'WangSaORZORZWangSa学号：' + info['ID'] + 'WangSaORZORZWangSa性别：' + info['sex'] + 'WangSaORZORZWangSa年龄：' + info['age'] + 'WangSaORZORZWangSa专业：' + info['major'] + 'WangSaORZORZWangSa开始时间：' + begin_time.strftime('%Y-%m-%d %T') + 'WangSaORZORZWangSa结束时间：' + end_time.strftime('%Y-%m-%d %T') + 'WangSaORZORZWangSa'
-		seat_arr[row][col] = 1
+		models.Rent.objects.create(student = q, chair = p, begin_time = begin_time, arrive_time = arrive_time, end_time = end_time)
+		seat[seat_pos] = True
+		seat_ID[seat_pos] = request.session['login_user']
+		user_info[seat_pos] = request.session['user_info']['login']
+		request.session['seat'] = seat
+		request.session['seat_ID'] = seat_ID
+		request.session['user_info'] = user_info
+		context['user_info'] = request.session['user_info']
+		context['seat'] = request.session['seat_ID']
+		return render(request, 'index.html', context)
 
-
-		request.session['seat_info'] = seat_info
-		request.session['seat_arr'] = seat_arr
-		context['seat_info'] = json.dumps(request.session['seat_info'])
-		context['seat_arr'] = json.dumps(request.session['seat_arr'])
-		return render(request, 'book_seat_int.html', context)
+def input(request):
+	context={}
+	return render(request, 'book_seat_int.html',context)
 
 
 

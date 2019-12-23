@@ -15,10 +15,10 @@ class Chairs(models.Model):
 class Students(models.Model):
 	student_id = models.CharField(primary_key=True, max_length=45)
 	name = models.CharField(max_length=45)
-	age = models.IntegerField()
-	sex = models.CharField(max_length=1)
+	age = models.IntegerField(default=18)
+	sex = models.CharField(max_length=1,default='M')
 	major = models.CharField(max_length=45)
-	password = models.CharField(max_length=128)
+	password = models.CharField(max_length=128,default='Fudan')
 	is_admin = models.BooleanField(default = False)
 
 		

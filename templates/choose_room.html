@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>Look Friend</title>
+	<title>Choose Room</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<link rel="icon" href="/assets/img/icon.ico" type="image/x-icon"/>
 
@@ -52,7 +52,16 @@
 
 				<div class="container-fluid">
 					<div class="collapse" id="search-nav">
-						
+						<form class="navbar-left navbar-form nav-search mr-md-3">
+{#							<div class="input-group">#}
+{#								<div class="input-group-prepend">#}
+{#									<button type="submit" class="btn btn-search pr-1">#}
+{#										<i class="fa fa-search search-icon"></i>#}
+{#									</button>#}
+{#								</div>#}
+{#								<input type="text" placeholder="Search users..." class="form-control">#}
+{#							</div>#}
+						</form>
 					</div>
 					<ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
 						<li class="nav-item toggle-nav-search hidden-caret">
@@ -60,18 +69,7 @@
 								<i class="fa fa-search"></i>
 							</a>
 						</li>
-						<li class="nav-item dropdown hidden-caret">
-							<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false">
-								<div class="avatar-sm">
-									
-								</div>
-							</a>
-							<ul class="dropdown-menu dropdown-user animated fadeIn">
-								<div class="dropdown-user-scroll scrollbar-outer">
-									
-								</div>
-							</ul>
-						</li>
+						
 					</ul>
 				</div>
 			</nav>
@@ -84,12 +82,12 @@
 				<div class="sidebar-content">
 					<div class="user pt-5" >
 						<div class="avatar-sm float-left mr-2 ">
-							<span class="avatar-title rounded-circle border border-white bg-danger">{{ user.name.0 }}</span>
+							<span class="avatar-title rounded-circle border border-white bg-danger">{{ user_name.0 }}</span>
 						</div>
 						<div class="info">
 							<a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
 								<span>
-									{{ user.name }}
+									{{ user_name }}
 									<span class="user-level">Student</span>
 									<span class="caret"></span>
 								</span>
@@ -152,6 +150,7 @@
 											<span class="sub-item">Rules</span>
 										</a>
 									</li>
+								</ul>
 							</div>
 						</li>
 						<li class="nav-item">
@@ -167,6 +166,7 @@
 											<span class="sub-item">My Attention&Fan</span>
 										</a>
 									</li>
+	
 									<li>
 										<a href="/add_friends">
 											<span class="sub-item">Add an Attention</span>
@@ -175,6 +175,7 @@
 								</ul>
 							</div>
 						</li>
+
 					</ul>
 				</div>
 			</div>
@@ -185,45 +186,47 @@
 			<div class="content">
 				<div class="page-inner">
 					<div class="mt-2 mb-4">
-						<h2 class="text-white pb-2">Welcome back, {{ user.name }} !</h2>
-						<h5 class="text-white op-7 mb-4">Book your seat and find your friends!</h5>
+						<h5 class="text-white op-7 mb-4">Choose rooms!</h5>
 					</div>
 
 
 
 					<div class="row">
-                        <div class="col-md-4">
+						<div class="col-md-12">
 							<div class="card">
-								<div class="card-body">
-                                     {% if not attention_list %}
-                                         <div class="card-title fw-mediumbold">You haven't added a friend to follow :(</div>
-                                         <div class="card-title fw-mediumbold">Add a friend right now!</div>
+								<div class="card-header">
+									<div class="card-title">Choose rooms to select a seat!</div>
+								</div>
+								<div class="card-body pb-0">
+                                    {% if not cls_list %}
+                                            <div class="card-title fw-mediumbold">No Rooms</div>
                                      {% else %}
-                                         <div class="card-title fw-mediumbold">People I'm Following</div>
+                                         <div class="card-title fw-mediumbold">Rooms</div>
 
-                                         <form action="/look_friends" method="POST">
+                                         <form action="/choose_room" method="POST">
                                             {% csrf_token %}
 
 
                                             <div class="card-list">
-                                                {% for stu in attention_list %}
+                                                {% for cls in cls_list %}
 
 								        		<div class="item-list">
                                                     <div class="avatar avatar-away">
-                                            	        <span class="avatar-title rounded-circle border border-white bg-danger">{{ stu.name.0 }}</span>
+                                            	        <span class="avatar-title rounded-circle border border-white bg-danger">{{ cls.id }}</span>
                                                     </div>
 											        <div class="info-user ml-3">
-												        <div class="username">{{ stu.name }}</div>
-												        <div class="status">{{ stu.student_id }} - {{ stu.major }}</div>
+												        <div class="username">Room ID: {{ cls.room_id }}</div>
+												        <div class="status">Number of Availiable Seats: {{ cls.availible_number }}</div>
 											        </div>
 
-                                                    <input type="radio" name="delete_a_friend" value={{ stu.student_id }} >
+                                                    <input type="radio" name="room"
+                                                                  value={{ cls.room_id }} >
 
                                                 </div>
                                                 {% endfor %}
                                                 <div style="text-align: right;">
                                                     <button type="submit" class="btn btn-icon btn-primary btn-round btn-xs mt-5 pl-5 pr-4">
-												        <i class="fa fa-minus"></i>
+												        <i class="fa fa-search"></i>
                                                     </button>
                                                 </div>
 
@@ -231,43 +234,11 @@
                                          </form>
 
                                      {% endif %}
-
-
 								</div>
 							</div>
 						</div>
-				    	<div class="col-md-4">
-							<div class="card">
-								<div class="card-body">
-                                     {% if not fan_list %}
-                                         <div class="card-title fw-mediumbold">No one is following you :(</div>
-                                     {% else %}
-                                         <div class="card-title fw-mediumbold">People Following me </div>
 
-                                            <div class="card-list">
-                                                {% for stu in fan_list %}
 
-								        		<div class="item-list">
-                                                    <div class="avatar avatar-away">
-                                            	        <span class="avatar-title rounded-circle border border-white bg-danger">{{ stu.name.0 }} </span>
-                                                    </div>
-											        <div class="info-user ml-3">
-												        <div class="username">{{ stu.name }}</div>
-												        <div class="status">{{ stu.student_id }} - {{ stu.major }}</div>
-											        </div>
-
-                                                   
-
-                                                </div>
-                                                {% endfor %}        
-                                            </div>
-
-                                     {% endif %}
-
-								</div>
-							</div>
-						</div>
-						
 					</div>
 				</div>
 			</div>
@@ -317,6 +288,6 @@
 	<script src="/assets/js/atlantis.min.js"></script>
 
 	<!-- Atlantis DEMO methods, don't include it in your project! -->
-
+	
 </body>
 </html>

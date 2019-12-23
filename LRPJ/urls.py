@@ -18,8 +18,9 @@ urlpatterns = [
 	url(r'^look_friends', views_1.look_friends, name = 'look_friends'),
     url(r'^logout', views_1.logout, name = 'logout'),
     url(r'^login', views_1.login, name = 'login'),
-	url(r'^choose_seat', views_2.choose_seat, name = 'choose_seat'),
 	url(r'^choose_room', views_2.choose_room, name = 'choose_room'),
-	url(r'^home', views_2.home, name = 'home'),
+	url(r'^choose_seat', views_2.choose_seat, name = 'choose_seat'),
+	url(r'^rule', views_1.rule, name = 'rule'),
+	url(r'^home', views_1.home, name = 'home'),
 ]
 urlpatterns += staticfiles_urlpatterns()

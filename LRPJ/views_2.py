@@ -9,40 +9,28 @@ from . import tools
 from data import models
 import time
 import datetime
+
 import json
 
-def home(request):
-	request.session.setdefault('login_user', '???')
+def choose_room(request):
 	request.session.setdefault('login_user', '???')
 	user_id = request.session['login_user']
 	if user_id == '???':
 		return HttpResponseRedirect('/login')
 	user = models.Students.objects.get(pk = user_id)
-	if user.is_admin:
+	if request.session['user_info']['is_admin']:
 		return HttpResponseRedirect('/generate_seat')
-	context = { 'user' : user }
 	
-	now = timezone.now()
-	cur_res = models.Rent.objects.filter(end_time__gte = now, student = user)
-	res_list = models.Rent.objects.filter(student = user)
-	if cur_res:
-		context['cur_res'] = cur_res
-	if res_list:
-		context['res_list'] = res_list 
-		
-	return render(request, 'main_menu.html', context)
-
-def choose_room(request):
 	context = tools.init(request)
+	#print(context)
 
-	if request.session['login_user'] == '???':
-		return HttpResponseRedirect('/login')
-	#if request.method != 'POST':
-	#	return HttpResponseRedirect('/home')
-	#room_id = request.POST.get('room', '')
-	#request.session['room'] = room_id
+	cls_list = models. Rooms.objects.all()
+	context['cls_list'] = cls_list
 	
-	request.session['room'] = 'Z2310'
+	if request.method != 'POST':
+		return render(request, 'choose_room.html', context)
+
+	request.session['room'] = request.POST.get('room', '')
 
 	begin_time = datetime.datetime.now() 
 	end_time = datetime.datetime.now() + datetime.timedelta(hours = 2)
@@ -56,13 +44,18 @@ def choose_room(request):
 	request.session['end_time'] = end_dict
 
 	if not tools.build_room(request.session['room'], request):
-		return HttpResponseRedirect('/home')
-
+		return render(request, 'choose_room.html', context)
+	
 	return HttpResponseRedirect('/choose_seat')
 
 
 def choose_seat(request):
 	context = tools.init(request)
+	if request.session['login_user'] == '???':
+		return HttpResponseRedirect('/login')
+	if request.session['user_info']['is_admin']:
+		return HttpResponseRedirect('/generate_seat')
+
 	context['seat_info'] = json.dumps(request.session['seat_info'])
 	context['seat_arr'] = json.dumps(request.session['seat_arr'])
 	begin_time = tools.dict_to_time(request.session['begin_time'])

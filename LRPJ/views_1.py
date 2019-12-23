@@ -9,6 +9,7 @@ from . import tools
 from data import models
 import time
 import datetime
+
 import json
 
 
@@ -175,15 +176,6 @@ def generate_seat(request):
 
 
 
-def logout(request):
-	request.session['login_user'] = '???'
-	request.session['user_name'] = 'none'
-	request.session['user_info'] = {}
-	request.session['seat_info'] = []
-	request.session['room'] = 'none'
-	return HttpResponseRedirect('/login')
-
-
 def login(request):
 	context = tools.init(request)
 
@@ -194,23 +186,34 @@ def login(request):
 		
 	ID = request.POST.get('ID','')
 	psw = request.POST.get('psw','')
-	s = tools.ID_to_dist(ID)
+	s = models.Students.objects.filter(student_id = ID)
+	user_info = {}
 
-	if s['exists'] and s['psw'] == psw :
-		s.pop('psw')
-		s.pop('exists')
-		request.session['login_user'] = s['ID']
-		request.session['user_name'] = s['name']
-		request.session['user_info'] = s
-		return HttpResponseRedirect('/home')
+	if s.exists() and s.values_list('password', flat = True)[0] == psw :
+		ss = tools.ID_to_dist(ID)
+		ss.pop('psw')
+		ss.pop('exists')
+		request.session['login_user'] = ss['ID']
+		request.session['user_name'] = ss['name']
+		request.session['user_info'] = ss
+		if s[0].is_admin:
+			return HttpResponseRedirect('/generate_seat')
+		else:
+			return HttpResponseRedirect('/home')
 	else :
 		context['error'] = True
 		return render(request, 'login.html', context)
 
-
+def logout(request):
+	request.session['login_user'] = '???'
+	request.session['user_info'] = ''
+	request.session['user_name'] = ''
+	context = {'error': False}
+	return HttpResponseRedirect('/login')
 
 def change_password(request):
 	context = tools.init(request)
+
 	if request.session['login_user'] == '???' :
 		return HttpResponseRedirect('/login')
 	if request.method != 'POST' :
@@ -227,4 +230,38 @@ def change_password(request):
 
 	return HttpResponseRedirect('/home')	
 
+def home(request):
+	context = tools.init(request)
+	
+	user_id = request.session['login_user']
+	if user_id == '???':
+		return HttpResponseRedirect('/login')
+	user = models.Students.objects.get(pk = user_id)
+	if user.is_admin:
+		return HttpResponseRedirect('/generate_seat')
+	context['user'] = user
+	
+	now = timezone.now()
+	if request.POST.get('cancel_reservation'):
+		models.Rent.objects.filter(end_time__gte = now, student = user).delete()
+	
+	cur_res = models.Rent.objects.filter(end_time__gte = now, student = user)
+	res_list = models.Rent.objects.filter(end_time__lte = now, student = user)	
+	if cur_res:
+		context['cur_res'] = cur_res
+	if res_list:
+		context['res_list'] = res_list 
+		
+	return render(request, 'main_menu.html', context)
 
+def rule(request):
+	context = tools.init(request)
+
+	user_id = request.session['login_user']
+	if user_id == '???':
+		return HttpResponseRedirect('/login')
+	user = models.Students.objects.get(pk = user_id)
+	if user.is_admin:
+		return HttpResponseRedirect('/generate_seat')
+	context = { 'user' : user }
+	return render(request, 'rule.html', context)

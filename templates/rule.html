@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>Look Friend</title>
+	<title>Rules</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<link rel="icon" href="/assets/img/icon.ico" type="image/x-icon"/>
 
@@ -29,8 +29,8 @@
 		<div class="main-header">
 			<!-- Logo Header -->
 			<div class="logo-header" data-background-color="dark2">
-
-
+				
+				
 					<img src="/assets/img/Fudan_University_Logo.svg" alt="navbar brand" class="navbar-brand">
 
 				<button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +49,7 @@
 
 			<!-- Navbar Header -->
 			<nav class="navbar navbar-header navbar-expand-lg" data-background-color="dark">
-
+				
 				<div class="container-fluid">
 					<div class="collapse" id="search-nav">
 						
@@ -84,12 +84,12 @@
 				<div class="sidebar-content">
 					<div class="user pt-5" >
 						<div class="avatar-sm float-left mr-2 ">
-							<span class="avatar-title rounded-circle border border-white bg-danger">{{ user.name.0 }}</span>
+							<span class="avatar-title rounded-circle border border-white bg-danger">{{ user_name.0 }}</span>
 						</div>
 						<div class="info">
 							<a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
 								<span>
-									{{ user.name }}
+									{{ user_name }}
 									<span class="user-level">Student</span>
 									<span class="caret"></span>
 								</span>
@@ -152,6 +152,7 @@
 											<span class="sub-item">Rules</span>
 										</a>
 									</li>
+								</ul>
 							</div>
 						</li>
 						<li class="nav-item">
@@ -167,6 +168,7 @@
 											<span class="sub-item">My Attention&Fan</span>
 										</a>
 									</li>
+	
 									<li>
 										<a href="/add_friends">
 											<span class="sub-item">Add an Attention</span>
@@ -185,97 +187,98 @@
 			<div class="content">
 				<div class="page-inner">
 					<div class="mt-2 mb-4">
-						<h2 class="text-white pb-2">Welcome back, {{ user.name }} !</h2>
+						<h2 class="text-white pb-2">Welcome back, {{ user_name }} !</h2>
 						<h5 class="text-white op-7 mb-4">Book your seat and find your friends!</h5>
 					</div>
-
-
-
-					<div class="row">
-                        <div class="col-md-4">
-							<div class="card">
-								<div class="card-body">
-                                     {% if not attention_list %}
-                                         <div class="card-title fw-mediumbold">You haven't added a friend to follow :(</div>
-                                         <div class="card-title fw-mediumbold">Add a friend right now!</div>
-                                     {% else %}
-                                         <div class="card-title fw-mediumbold">People I'm Following</div>
-
-                                         <form action="/look_friends" method="POST">
-                                            {% csrf_token %}
-
-
-                                            <div class="card-list">
-                                                {% for stu in attention_list %}
-
-								        		<div class="item-list">
-                                                    <div class="avatar avatar-away">
-                                            	        <span class="avatar-title rounded-circle border border-white bg-danger">{{ stu.name.0 }}</span>
-                                                    </div>
-											        <div class="info-user ml-3">
-												        <div class="username">{{ stu.name }}</div>
-												        <div class="status">{{ stu.student_id }} - {{ stu.major }}</div>
-											        </div>
-
-                                                    <input type="radio" name="delete_a_friend" value={{ stu.student_id }} >
-
-                                                </div>
-                                                {% endfor %}
-                                                <div style="text-align: right;">
-                                                    <button type="submit" class="btn btn-icon btn-primary btn-round btn-xs mt-5 pl-5 pr-4">
-												        <i class="fa fa-minus"></i>
-                                                    </button>
-                                                </div>
-
-                                            </div>
-                                         </form>
-
-                                     {% endif %}
-
-
-								</div>
+						<div class="card-title">Reservation Rules</div>
+							<div class="card-body">
+								<ol class="activity-feed">
+									<li>1、每个读者每次只能预约一个座位。每次预约结束后，方可进⾏下次预约。</li>
+									<li>2、读者可预约2日内（含当日），从08:00到22:00的座位。</li>
+									<li>3、读者可在指定时间开始后1小时内到管理理员处签到。</li>
+									<li>4、成功预约的座位可提前30分钟取消，读者可以通过点击座位或者在我的信息中进行取消。每天读者可取消预约两次，请谨慎预约。</li>
+									<li>5、预约座位保留留⾄指定时间开始后1小时。</li>
+									<li>6、暂时离开阅览室时，到管理理员处进行暂离操作，座位保留30分钟。离开30分钟以上视为放弃座位，不记录违规。</li>
+									<li>7、30天内失约满2次后，读者将被限制使⽤预约功能7天。</li>
+									<li>8、读者如果要离开或者预约时间结束，请自觉到管理员处点击签退功能将预约座位释放。</li>
+								</ol>
 							</div>
-						</div>
-				    	<div class="col-md-4">
-							<div class="card">
-								<div class="card-body">
-                                     {% if not fan_list %}
-                                         <div class="card-title fw-mediumbold">No one is following you :(</div>
-                                     {% else %}
-                                         <div class="card-title fw-mediumbold">People Following me </div>
-
-                                            <div class="card-list">
-                                                {% for stu in fan_list %}
-
-								        		<div class="item-list">
-                                                    <div class="avatar avatar-away">
-                                            	        <span class="avatar-title rounded-circle border border-white bg-danger">{{ stu.name.0 }} </span>
-                                                    </div>
-											        <div class="info-user ml-3">
-												        <div class="username">{{ stu.name }}</div>
-												        <div class="status">{{ stu.student_id }} - {{ stu.major }}</div>
-											        </div>
-
-                                                   
-
-                                                </div>
-                                                {% endfor %}        
-                                            </div>
-
-                                     {% endif %}
-
-								</div>
-							</div>
-						</div>
-						
 					</div>
 				</div>
 			</div>
 
 		</div>
-
-		<!-- Custom template | don't include it in your project! -->
 		
+		<!-- Custom template | don't include it in your project! -->
+		<div class="custom-template">
+			<div class="title">Settings</div>
+			<div class="custom-content">
+				<div class="switcher">
+					<div class="switch-block">
+						<h4>Logo Header</h4>
+						<div class="btnSwitch">
+							<button type="button" class="changeLogoHeaderColor" data-color="dark"></button>
+							<button type="button" class="changeLogoHeaderColor" data-color="blue"></button>
+							<button type="button" class="changeLogoHeaderColor" data-color="purple"></button>
+							<button type="button" class="changeLogoHeaderColor" data-color="light-blue"></button>
+							<button type="button" class="changeLogoHeaderColor" data-color="green"></button>
+							<button type="button" class="changeLogoHeaderColor" data-color="orange"></button>
+							<button type="button" class="changeLogoHeaderColor" data-color="red"></button>
+							<button type="button" class="changeLogoHeaderColor" data-color="white"></button>
+							<br/>
+							<button type="button" class="selected changeLogoHeaderColor" data-color="dark2"></button>
+							<button type="button" class="changeLogoHeaderColor" data-color="blue2"></button>
+							<button type="button" class="changeLogoHeaderColor" data-color="purple2"></button>
+							<button type="button" class="changeLogoHeaderColor" data-color="light-blue2"></button>
+							<button type="button" class="changeLogoHeaderColor" data-color="green2"></button>
+							<button type="button" class="changeLogoHeaderColor" data-color="orange2"></button>
+							<button type="button" class="changeLogoHeaderColor" data-color="red2"></button>
+						</div>
+					</div>
+					<div class="switch-block">
+						<h4>Navbar Header</h4>
+						<div class="btnSwitch">
+							<button type="button" class="selected changeTopBarColor" data-color="dark"></button>
+							<button type="button" class="changeTopBarColor" data-color="blue"></button>
+							<button type="button" class="changeTopBarColor" data-color="purple"></button>
+							<button type="button" class="changeTopBarColor" data-color="light-blue"></button>
+							<button type="button" class="changeTopBarColor" data-color="green"></button>
+							<button type="button" class="changeTopBarColor" data-color="orange"></button>
+							<button type="button" class="changeTopBarColor" data-color="red"></button>
+							<button type="button" class="changeTopBarColor" data-color="white"></button>
+							<br/>
+							<button type="button" class="changeTopBarColor" data-color="dark2"></button>
+							<button type="button" class="changeTopBarColor" data-color="blue2"></button>
+							<button type="button" class="changeTopBarColor" data-color="purple2"></button>
+							<button type="button" class="changeTopBarColor" data-color="light-blue2"></button>
+							<button type="button" class="changeTopBarColor" data-color="green2"></button>
+							<button type="button" class="changeTopBarColor" data-color="orange2"></button>
+							<button type="button" class="changeTopBarColor" data-color="red2"></button>
+						</div>
+					</div>
+					<div class="switch-block">
+						<h4>Sidebar</h4>
+						<div class="btnSwitch">
+							<button type="button" class="changeSideBarColor" data-color="white"></button>
+							<button type="button" class="changeSideBarColor" data-color="dark"></button>
+							<button type="button" class="selected changeSideBarColor" data-color="dark2"></button>
+						</div>
+					</div>
+					<div class="switch-block">
+						<h4>Background</h4>
+						<div class="btnSwitch">
+							<button type="button" class="changeBackgroundColor" data-color="bg2"></button>
+							<button type="button" class="changeBackgroundColor selected" data-color="bg1"></button>
+							<button type="button" class="changeBackgroundColor" data-color="bg3"></button>
+							<button type="button" class="selected changeBackgroundColor" data-color="dark"></button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="custom-toggle">
+				<i class="flaticon-settings"></i>
+			</div>
+		</div>
 		<!-- End Custom template -->
 	</div>
 	<!--   Core JS Files   -->
