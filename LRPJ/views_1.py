@@ -256,12 +256,13 @@ def home(request):
 
 def rule(request):
 	context = tools.init(request)
-
+	
 	user_id = request.session['login_user']
 	if user_id == '???':
 		return HttpResponseRedirect('/login')
 	user = models.Students.objects.get(pk = user_id)
 	if user.is_admin:
 		return HttpResponseRedirect('/generate_seat')
-	context = { 'user' : user }
+
+	context['user'] = user 
 	return render(request, 'rule.html', context)
