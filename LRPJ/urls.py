@@ -22,5 +22,6 @@ urlpatterns = [
 	url(r'^choose_seat', views_2.choose_seat, name = 'choose_seat'),
 	url(r'^rule', views_1.rule, name = 'rule'),
 	url(r'^home', views_1.home, name = 'home'),
+	url(r'^', views_1.home, name = 'home'),
 ]
 urlpatterns += staticfiles_urlpatterns()

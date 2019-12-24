@@ -81,14 +81,14 @@ def build_room(room, request):
 		if r.exists():
 			seat_info[pos]['user'] = r[0].student.student_id
 			
-			begin_time = r[0].begin_time + datetime.timedelta(hours = 8)
-			end_time = r[0].end_time + datetime.timedelta(hours = 8)
+			begin_time_p = r[0].begin_time + datetime.timedelta(hours = 8)
+			end_time_p = r[0].end_time + datetime.timedelta(hours = 8)
 			#print(begin_time)
 			#print(end_time)
 
 			seat_info[pos]['rent'] = True
 			info = ID_to_dist(r[0].student.student_id)
-			seat_info[pos]['info'] = '姓名：' + info['name'] + 'WangSaORZORZWangSa学号：' + info['ID'] + 'WangSaORZORZWangSa性别：' + info['sex'] + 'WangSaORZORZWangSa年龄：' + info['age'] + 'WangSaORZORZWangSa专业：' + info['major'] + 'WangSaORZORZWangSa开始时间：' + begin_time.strftime('%Y-%m-%d %T') + 'WangSaORZORZWangSa结束时间：' + end_time.strftime('%Y-%m-%d %T') + 'WangSaORZORZWangSa'
+			seat_info[pos]['info'] = '姓名：' + info['name'] + 'WangSaORZORZWangSa学号：' + info['ID'] + 'WangSaORZORZWangSa性别：' + info['sex'] + 'WangSaORZORZWangSa年龄：' + info['age'] + 'WangSaORZORZWangSa专业：' + info['major'] + 'WangSaORZORZWangSa开始时间：' + begin_time_p.strftime('%Y-%m-%d %T') + 'WangSaORZORZWangSa结束时间：' + end_time_p.strftime('%Y-%m-%d %T') + 'WangSaORZORZWangSa'
 			seat_arr[s[i].row][s[i].col] = 1
 	
 	request.session['seat_info'] = seat_info
