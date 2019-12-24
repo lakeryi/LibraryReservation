@@ -1271,7 +1271,7 @@ p.about-para-w3ls {
 
 .cbp-ig-icon_:before {
 	font-family:FontAwesome;
-	font-size: 5em;
+	font-size: 2em;
 	speak: none;
 	color: #005011;
 	font-style: normal;
@@ -1280,6 +1280,7 @@ p.about-para-w3ls {
 	text-transform: none;
 	line-height: 1;
 	-webkit-font-smoothing: antialiased;
+	font-family:FontAwesome;
 }
 
 .w3_road_:before {
