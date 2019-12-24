@@ -243,10 +243,10 @@ def home(request):
 	
 	now = timezone.now()
 	if request.POST.get('cancel_reservation'):
-		models.Rent.objects.filter(end_time__gte = now, student = user).delete()
+		models.Rent.objects.filter(end_time__gt = now, student = user).delete()
 	
 	cur_res = models.Rent.objects.filter(end_time__gte = now, student = user)
-	res_list = models.Rent.objects.filter(end_time__lte = now, student = user)	
+	res_list = models.Rent.objects.filter(end_time__lt = now, student = user)	
 	if cur_res:
 		context['cur_res'] = cur_res
 	if res_list:

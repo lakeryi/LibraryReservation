@@ -125,7 +125,7 @@ def choose_seat(request):
 			end_time = tools.dict_to_time(end_dict)
 
 			c = models.Chairs.objects.all().filter(row = row, col = col, room = room_id).values_list('chair_id', flat = True)[0]
-			r = models.Rent.objects.all().filter(student = request.session['login_user'], chair = c, begin_time__lte = end_time, end_time__gte = begin_time).order_by('begin_time')
+			r = models.Rent.objects.all().filter(student = request.session['login_user'], chair = c, begin_time__lt = end_time, end_time__gt = begin_time).order_by('begin_time')
 			r[0].delete()
 
 			seat_info[pos]['rent'] = False
@@ -140,7 +140,7 @@ def choose_seat(request):
 			return render(request, 'book_seat_int.html', context)
 	else:
 		now_time = datetime.datetime.now()
-		s = models.Rent.objects.all().filter(student = request.session['login_user'], end_time__gte = now_time)
+		s = models.Rent.objects.all().filter(student = request.session['login_user'], end_time__gt = now_time)
 		if s.exists():
 			return render(request, 'book_seat_int.html', context)
 		p = models.Chairs.objects.all().get(chair_id = seat_info[pos]['chair'])

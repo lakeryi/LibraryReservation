@@ -77,7 +77,7 @@ def build_room(room, request):
 		seat_info[pos]['info'] = '这是一个没人预约的座位'
 		seat_arr[s[i].row][s[i].col] = 2
 		#Todo: add time boundary
-		r = models.Rent.objects.all().filter(chair_id = s[i].chair_id, begin_time__lte = end_time, end_time__gte = begin_time).order_by('begin_time')
+		r = models.Rent.objects.all().filter(chair_id = s[i].chair_id, begin_time__lt = end_time, end_time__gt = begin_time).order_by('begin_time')
 		if r.exists():
 			seat_info[pos]['user'] = r[0].student.student_id
 			
