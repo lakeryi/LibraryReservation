@@ -24,7 +24,7 @@ def choose_room(request):
 	context = tools.init(request)
 	#print(context)
 
-	cls_list = models. Rooms.objects.all()
+	cls_list = models.Rooms.objects.all()
 	context['cls_list'] = cls_list
 	
 	if request.method != 'POST':
