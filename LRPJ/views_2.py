@@ -32,8 +32,8 @@ def choose_room(request):
 
 	request.session['room'] = request.POST.get('room', '')
 
-	begin_time = datetime.datetime.now() 
-	end_time = datetime.datetime.now() + datetime.timedelta(hours = 2)
+	begin_time = datetime.datetime.now() + datetime.timedelta(hours = 1)
+	end_time = datetime.datetime.now() + datetime.timedelta(hours = 3)
 	begin_dict = tools.time_to_dict(begin_time)
 	begin_dict['minute'] = 0
 	begin_dict['second'] = 0
@@ -76,6 +76,7 @@ def choose_seat(request):
 		if begin_hour + 2 > end_hour:
 			return render(request, 'book_seat_int.html', context)
 
+
 		now_time = datetime.datetime.now() + datetime.timedelta(days = day)
 		begin_dict = tools.time_to_dict(now_time)
 		begin_dict['hour'] = begin_hour
@@ -85,6 +86,13 @@ def choose_seat(request):
 		end_dict['hour'] = end_hour
 		end_dict['minute'] = 0
 		end_dict['second'] = 0
+		begin_time = tools.dict_to_time(begin_dict)
+		end_time = tools.dict_to_time(end_dict)
+		t_time = datetime.datetime.now()
+
+		if (begin_time < t_time):
+			return render(request, 'book_seat_int.html', context)
+
 		request.session['begin_time'] = begin_dict
 		request.session['end_time'] = end_dict
 
@@ -93,8 +101,6 @@ def choose_seat(request):
 		context['seat_info'] = json.dumps(request.session['seat_info'])
 		context['seat_arr'] = json.dumps(request.session['seat_arr'])
 
-		begin_time = tools.dict_to_time(request.session['begin_time'])
-		end_time = tools.dict_to_time(request.session['end_time'])
 
 		context['begin_time'] = begin_time.strftime('%Y-%m-%d %T')
 		context['end_time'] = end_time.strftime('%Y-%m-%d %T')
