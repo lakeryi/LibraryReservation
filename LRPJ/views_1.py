@@ -127,6 +127,9 @@ def generate_seat(request):
 			context['error'] = 'This Room ID has been used !'
 			return render(request, 'create_classroom.html', context)
 	
+		if int(room_row) > 30:
+			context['error'] = 'Too many rows !'
+			return render(request, 'create_classroom.html', context)
 		if int(room_col) > 10:
 			context['error'] = 'Too many columns !'
 			return render(request, 'create_classroom.html', context)
