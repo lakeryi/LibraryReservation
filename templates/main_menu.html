@@ -165,14 +165,26 @@
 								<ul class="nav nav-collapse">
 									<li>
 										<a href="/look_friends">
-											<span class="sub-item">My Attention&Fan</span>
+											<span class="sub-item">My Attention&Fan </span>
 										</a>
 									</li>
 	
 									<li>
 										<a href="/add_friends">
-											<span class="sub-item">Add an Attention</span>
+											<span class="sub-item">Add an Attention </span>
 										</a>
+									</li>
+									
+									<li>
+										{% if user.close %}
+											<a href="/open_attention">
+												<span class="sub-item"> Open Attention </span>
+											</a>	
+										{% else %}
+											<a href="/close_attention">
+												<span class="sub-item"> Close Attention </span>
+											</a>	
+										{% endif %}
 									</li>
 								</ul>
 							</div>

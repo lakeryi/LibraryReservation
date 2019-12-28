@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>Rules</title>
+	<title>Look Reservation of Friends</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<link rel="icon" href="/assets/img/icon.ico" type="image/x-icon"/>
 
@@ -84,12 +84,12 @@
 				<div class="sidebar-content">
 					<div class="user pt-5" >
 						<div class="avatar-sm float-left mr-2 ">
-							<span class="avatar-title rounded-circle border border-white bg-danger">{{ user_name.0 }}</span>
+							<span class="avatar-title rounded-circle border border-white bg-danger">{{ user.name.0 }}</span>
 						</div>
 						<div class="info">
 							<a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
 								<span>
-									{{ user_name }}
+									{{ user.name }}
 									<span class="user-level">Student</span>
 									<span class="caret"></span>
 								</span>
@@ -199,23 +199,48 @@
 			<div class="content">
 				<div class="page-inner">
 					<div class="mt-2 mb-4">
-						<h2 class="text-white pb-2">Welcome back, {{ user_name }} !</h2>
-						<h5 class="text-white op-7 mb-4">Book your seat and find your friends!</h5>
+						<h2 class="text-white pb-2">Welcome back, {{ user.name }} !</h2>
+						<h5 class="text-white op-7 mb-4">This is reservation history of {{ frd.name }}.</h5>
 					</div>
-						<div class="card-title">Reservation Rules</div>
-							<div class="card-body">
-								<ol class="activity-feed">
-									<li>1、每个读者每次都只能预约一个座位。每次预约的座位使用结束后，方可进行下次预约。</li>
-									<li>2、读者可以预约2日内（含当日），从08:00到22:00的座位。</li>
-									<li>3、读者可以在指定时间开始后1小时到管理员处签到。</li>
-									<li>4、成功预约的座位可以在自习开始30分钟之前取消，读者可以在选座界面或是主页完成取消预约。</li>
-									<li>5、预约的座位保留至指定时间开始后1小时为止。</li>
-									<li>6、暂离自习室时，需要到管理员处申请暂离，暂离的座位将保留30分钟。未登记暂离离开或登记暂离后离开30分钟以上视为放弃座位，但不记录违约。</li>
-									<li>7、30天内违约满2次后，第1次将被禁止使用预约功能1周，第2次将被禁止使用预约功能1月，第3次以后每次都将被禁止使用预约功能1学期。</li>
-									<li>8、如果需要提前离开自习室，请自觉到管理员处说明并释放相应座位。</li>
-									<li>9、如果自习时间到期后5分钟内仍未离开自习室，或是预约座位后1小时内未到管理员处签到，都将视为1次违约。</li>
-								</ol>
+
+						
+					<div class="row">
+						<div class="col-md-6">
+							<div class="card">
+								<div class="card-header">
+									<div class="card-head-row">
+										<div class="card-title">Reservation History in 7 days</div>
+
+									</div>
+								</div>
+								
+								{% if not res_list %}
+									<div class="card-title fw-mediumbold">&nbsp;&nbsp; No Reservation</div>
+								{% else %}
+									<form action="/home" method="POST">
+										<div class="card-body">
+											<ol class="activity-feed">
+											
+												{% for r in res_list %}
+												<li class="feed-item feed-item-secondary">
+													<td>Start time: {{ r.begin_time|date:"Y-m-d H:i:s" }}</td>
+													<br>
+													<td>End &nbsp;&nbsp; time: {{ r.end_time|date:"Y-m-d H:i:s" }}</td>
+													<br>
+													<span class="text"> Room : {{ r.chair.room.room_id }}</span>
+												</li>
+												{% endfor %}
+											</ol>
+										</div>
+										<div style="text-align: right;">
+		
+                                        </div>
+									</form>
+								{% endif %}
+								
+								
 							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -223,75 +248,7 @@
 		</div>
 		
 		<!-- Custom template | don't include it in your project! -->
-		<div class="custom-template">
-			<div class="title">Settings</div>
-			<div class="custom-content">
-				<div class="switcher">
-					<div class="switch-block">
-						<h4>Logo Header</h4>
-						<div class="btnSwitch">
-							<button type="button" class="changeLogoHeaderColor" data-color="dark"></button>
-							<button type="button" class="changeLogoHeaderColor" data-color="blue"></button>
-							<button type="button" class="changeLogoHeaderColor" data-color="purple"></button>
-							<button type="button" class="changeLogoHeaderColor" data-color="light-blue"></button>
-							<button type="button" class="changeLogoHeaderColor" data-color="green"></button>
-							<button type="button" class="changeLogoHeaderColor" data-color="orange"></button>
-							<button type="button" class="changeLogoHeaderColor" data-color="red"></button>
-							<button type="button" class="changeLogoHeaderColor" data-color="white"></button>
-							<br/>
-							<button type="button" class="selected changeLogoHeaderColor" data-color="dark2"></button>
-							<button type="button" class="changeLogoHeaderColor" data-color="blue2"></button>
-							<button type="button" class="changeLogoHeaderColor" data-color="purple2"></button>
-							<button type="button" class="changeLogoHeaderColor" data-color="light-blue2"></button>
-							<button type="button" class="changeLogoHeaderColor" data-color="green2"></button>
-							<button type="button" class="changeLogoHeaderColor" data-color="orange2"></button>
-							<button type="button" class="changeLogoHeaderColor" data-color="red2"></button>
-						</div>
-					</div>
-					<div class="switch-block">
-						<h4>Navbar Header</h4>
-						<div class="btnSwitch">
-							<button type="button" class="selected changeTopBarColor" data-color="dark"></button>
-							<button type="button" class="changeTopBarColor" data-color="blue"></button>
-							<button type="button" class="changeTopBarColor" data-color="purple"></button>
-							<button type="button" class="changeTopBarColor" data-color="light-blue"></button>
-							<button type="button" class="changeTopBarColor" data-color="green"></button>
-							<button type="button" class="changeTopBarColor" data-color="orange"></button>
-							<button type="button" class="changeTopBarColor" data-color="red"></button>
-							<button type="button" class="changeTopBarColor" data-color="white"></button>
-							<br/>
-							<button type="button" class="changeTopBarColor" data-color="dark2"></button>
-							<button type="button" class="changeTopBarColor" data-color="blue2"></button>
-							<button type="button" class="changeTopBarColor" data-color="purple2"></button>
-							<button type="button" class="changeTopBarColor" data-color="light-blue2"></button>
-							<button type="button" class="changeTopBarColor" data-color="green2"></button>
-							<button type="button" class="changeTopBarColor" data-color="orange2"></button>
-							<button type="button" class="changeTopBarColor" data-color="red2"></button>
-						</div>
-					</div>
-					<div class="switch-block">
-						<h4>Sidebar</h4>
-						<div class="btnSwitch">
-							<button type="button" class="changeSideBarColor" data-color="white"></button>
-							<button type="button" class="changeSideBarColor" data-color="dark"></button>
-							<button type="button" class="selected changeSideBarColor" data-color="dark2"></button>
-						</div>
-					</div>
-					<div class="switch-block">
-						<h4>Background</h4>
-						<div class="btnSwitch">
-							<button type="button" class="changeBackgroundColor" data-color="bg2"></button>
-							<button type="button" class="changeBackgroundColor selected" data-color="bg1"></button>
-							<button type="button" class="changeBackgroundColor" data-color="bg3"></button>
-							<button type="button" class="selected changeBackgroundColor" data-color="dark"></button>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="custom-toggle">
-				<i class="flaticon-settings"></i>
-			</div>
-		</div>
+		
 		<!-- End Custom template -->
 	</div>
 	<!--   Core JS Files   -->

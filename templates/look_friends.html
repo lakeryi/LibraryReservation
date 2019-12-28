@@ -172,6 +172,18 @@
 											<span class="sub-item">Add an Attention</span>
 										</a>
 									</li>
+									
+									<li>
+										{% if user.close %}
+											<a href="/open_attention">
+												<span class="sub-item"> Open Attention </span>
+											</a>	
+										{% else %}
+											<a href="/close_attention">
+												<span class="sub-item"> Close Attention </span>
+											</a>	
+										{% endif %}
+									</li>
 								</ul>
 							</div>
 						</li>
@@ -186,7 +198,13 @@
 				<div class="page-inner">
 					<div class="mt-2 mb-4">
 						<h2 class="text-white pb-2">Welcome back, {{ user.name }} !</h2>
-						<h5 class="text-white op-7 mb-4">Book your seat and find your friends!</h5>
+						<h5 class="text-white op-7 mb-4">
+							{% if error %}
+								{{error}}
+							{% else %}
+								Book your seat and find your friends!
+							{% endif %}
+						</h5>
 					</div>
 
 
@@ -217,13 +235,16 @@
 												        <div class="status">{{ stu.student_id }} - {{ stu.major }}</div>
 											        </div>
 
-                                                    <input type="radio" name="delete_a_friend" value={{ stu.student_id }} >
+                                                    <input type="radio" name="select" value={{ stu.student_id }} >
 
                                                 </div>
                                                 {% endfor %}
                                                 <div style="text-align: right;">
-                                                    <button type="submit" class="btn btn-icon btn-primary btn-round btn-xs mt-5 pl-5 pr-4">
+                                                    <button type="submit" class="btn btn-icon btn-primary btn-round btn-xs mt-5 pl-5 pr-4" name="delete_friend" value="a">
 												        <i class="fa fa-minus"></i>
+                                                    </button>
+													<button type="submit" class="btn btn-icon btn-primary btn-round btn-xs mt-5 pl-5 pr-4" name="look_friend" value="a">
+												        <i class="fa fa-search"></i>
                                                     </button>
                                                 </div>
 

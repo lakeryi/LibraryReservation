@@ -172,6 +172,18 @@
 											<span class="sub-item">Add an Attention</span>
 										</a>
 									</li>
+									
+									<li>
+										{% if user.close %}
+											<a href="/open_attention">
+												<span class="sub-item"> Open Attention </span>
+											</a>	
+										{% else %}
+											<a href="/close_attention">
+												<span class="sub-item"> Close Attention </span>
+											</a>	
+										{% endif %}
+									</li>
 								</ul>
 							</div>
 						</li>
@@ -186,7 +198,13 @@
 				<div class="page-inner">
 					<div class="mt-2 mb-4">
 						<h2 class="text-white pb-2">Welcome back, {{ user.name }} !</h2>
-						<h5 class="text-white op-7 mb-4">Book your seat and find your friends!</h5>
+						<h5 class="text-white op-7 mb-4">
+							{% if error %}
+								{{error}}
+							{% else %}
+								Book your seat and find your friends!
+							{% endif %}
+						</h5>
 					</div>
 
 

@@ -20,6 +20,7 @@ class Students(models.Model):
 	major = models.CharField(max_length=45)
 	password = models.CharField(max_length=128,default='Fudan')
 	is_admin = models.BooleanField(default = False)
+	close = models.BooleanField(default = False)
 
 		
 class Rent(models.Model):
@@ -32,8 +33,9 @@ class Rent(models.Model):
 
 
 class Friends(models.Model):
-	student0 = models.OneToOneField('Students', on_delete = models.CASCADE, related_name = 'out')
-	student1 = models.OneToOneField('Students', on_delete = models.CASCADE)
+	friends_id =  models.AutoField(primary_key=True)
+	student0 = models.ForeignKey('Students', on_delete = models.CASCADE, related_name = 'out')
+	student1 = models.ForeignKey('Students', on_delete = models.CASCADE)
 
 class Rooms(models.Model):
 	room_id = models.CharField(primary_key=True, max_length=45)
